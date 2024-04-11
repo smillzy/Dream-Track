@@ -1,0 +1,85 @@
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# Dependency directories
+jspm_packages/
+bower_components/
+
+# Logs and databases
+logs/
+*.log
+*.sqlite
+*.sql
+
+# Build output
+dist/
+build/
+out/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows shortcuts
+Desktop.ini
+.lnk
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+.idea_modules/
+application.properties
+
+
+# Compiled Object files, Static and Dynamic libs
+*.slo
+*.lo
+*.o
+*.obj
+*.a
+*.lib
+*.dll
+*.so
+*.dylib
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Archives
+*.zip
+*.rar
+*.gz
+*.tar.gz
+*.7z
+*.dmg
