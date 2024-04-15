@@ -52,7 +52,7 @@ public class TestClass implements CommandLineRunner {
 //        String type = "支出";
 //        String categoryName = "食物";
 //        Long categoryId = findCategoryId(categoryName, type);
-//        String date = "2024-04-15 16:53:38";
+//        String date = "2024-04-15 20:14:24";
 //        Long amountChange = Long.valueOf(500);
 //        updateAccountingRecord(userId, categoryId, amountChange, date);
 //        log.info("Update Account amount: " + type + categoryName + amountChange);
@@ -62,7 +62,7 @@ public class TestClass implements CommandLineRunner {
 //        String type = "支出";
 //        String categoryNameChange = "飲料";
 //        Long categoryIdChange = findCategoryId(categoryNameChange, type);
-//        String dateChange = "2024-04-15 16:54:22";
+//        String dateChange = "2024-04-15 20:15:01";
 //        updateAccountingRecord(userId, categoryIdChange, amountChange, dateChange);
 //        log.info("Update Account Name: " + type + categoryNameChange + amountChange);
 //

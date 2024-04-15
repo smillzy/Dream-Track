@@ -9,7 +9,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
-@SpringBootApplication
+//@SpringBootApplication
 @Slf4j
 @ComponentScan(basePackages = {"com.appworks.school.dreamtrack"})
 public class Liability implements CommandLineRunner {
@@ -38,17 +38,17 @@ public class Liability implements CommandLineRunner {
         Long userId = getUserId(userEmail);
         log.info("Receive userId: " + userId);
 
-//        String item = "學貸";
-//        String action = "借款";
-//        Long liabilitiesAmount = Long.valueOf(5000);
-//        insertLiabilities(userId, item, action, liabilitiesAmount);
-//        log.info("Add liabilities: " + item + action + liabilitiesAmount);
-
         String item = "學貸";
-        String action = "還款";
-        Long liabilitiesAmount = Long.valueOf(-3000);
+        String action = "借款";
+        Long liabilitiesAmount = Long.valueOf(5000);
         insertLiabilities(userId, item, action, liabilitiesAmount);
         log.info("Add liabilities: " + item + action + liabilitiesAmount);
+
+//        String item = "學貸";
+//        String action = "還款";
+//        Long liabilitiesAmount = Long.valueOf(-3000);
+//        insertLiabilities(userId, item, action, liabilitiesAmount);
+//        log.info("Add liabilities: " + item + action + liabilitiesAmount);
     }
 
     public Long getUserId(String userEmail){
