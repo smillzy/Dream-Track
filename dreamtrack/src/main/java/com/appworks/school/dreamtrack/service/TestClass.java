@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@SpringBootApplication
+//@SpringBootApplication
 @Slf4j
 @ComponentScan(basePackages = {"com.appworks.school.dreamtrack"})
 public class TestClass implements CommandLineRunner {
