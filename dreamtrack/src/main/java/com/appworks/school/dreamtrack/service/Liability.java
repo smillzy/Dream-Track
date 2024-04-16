@@ -9,6 +9,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
+import java.util.List;
+import java.util.Map;
+
 @SpringBootApplication
 @Slf4j
 @ComponentScan(basePackages = {"com.appworks.school.dreamtrack"})
@@ -50,12 +53,15 @@ public class Liability implements CommandLineRunner {
 //        insertLiabilities(userId, item, action, liabilitiesAmount);
 //        log.info("Add liabilities: " + item + action + liabilitiesAmount);
 
-        String item = "學貸";
-        String action = "借款";
-        Long liabilitiesAmount = Long.valueOf(6000);
-        String date = "2024-04-15 20:54:00";
-        updateLiabilities(userId, date, item, action, liabilitiesAmount);
-        log.info("Update liabilities: " + item + action + liabilitiesAmount);
+//        String item = "學貸";
+//        String action = "借款";
+//        Long liabilitiesAmount = Long.valueOf(6000);
+//        String date = "2024-04-15 20:54:00";
+//        updateLiabilities(userId, date, item, action, liabilitiesAmount);
+//        log.info("Update liabilities: " + item + action + liabilitiesAmount);
+
+//        List<Map<String, Object>> result = liabilitiesRepository.findAllLiabilities(userId);
+//        log.info("result: " + result);
     }
 
     public Long getUserId(String userEmail){
