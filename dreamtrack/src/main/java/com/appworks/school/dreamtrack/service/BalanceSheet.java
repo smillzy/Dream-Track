@@ -1,7 +1,5 @@
 package com.appworks.school.dreamtrack.service;
 
-
-import com.appworks.school.dreamtrack.repository.AssetsRepository;
 import com.appworks.school.dreamtrack.repository.BalanceSheetRepository;
 import com.appworks.school.dreamtrack.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -9,18 +7,12 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@SpringBootApplication
+//@SpringBootApplication
 @Slf4j
 @ComponentScan(basePackages = {"com.appworks.school.dreamtrack"})
 public class BalanceSheet implements CommandLineRunner {
