@@ -16,4 +16,10 @@ public class LiabilitiesRepositoryImpl implements LiabilitiesRepository{
         String insertSql = "INSERT INTO liabilities (user_id, item, `action`, liability_amount, `date`) VALUES (?, ?, ?, ?, now());";
         jdbcTemplate.update(insertSql, id, item, action, liabilitiesAmount);
     }
+
+    @Override
+    public void updateLiabilities(Long id, String date, String item, String action, Long liabilitiesAmount) {
+        String insertSql = "UPDATE liabilities SET item = ?, `action` = ?, liability_amount = ?, date = NOW() WHERE user_id = ? AND date = ?;";
+        jdbcTemplate.update(insertSql, item, action, liabilitiesAmount, id, date);
+    }
 }
