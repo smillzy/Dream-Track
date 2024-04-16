@@ -9,7 +9,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
-@SpringBootApplication
+//@SpringBootApplication
 @Slf4j
 @ComponentScan(basePackages = {"com.appworks.school.dreamtrack"})
 public class Assets implements CommandLineRunner {
@@ -69,8 +69,8 @@ public class Assets implements CommandLineRunner {
 //        updateAssetsForeignCurrencies(userId, date, currencyId, action, quantityForeignChange, quantityTWDChange, rateChange);
 //        log.info("Update Foreign Currencies: " + action + ", 美金: " + quantityForeignChange);
 
-        String symbol = "0050";
-        int stockId = getStockId(symbol);
+//        String symbol = "0050";
+//        int stockId = getStockId(symbol);
 
 //        // Insert Assets Stock
 //        String action = "買進";
@@ -80,14 +80,14 @@ public class Assets implements CommandLineRunner {
 //        insertAssetsStock(userId, stockId, action, price, quantity, stockAmount);
 //        log.info("Insert Assets Stock: " + action + ", 金額: " + stockAmount);
 
-        // Update Assets Stock
-        String action = "買進";
-        String date = "2024-04-16 00:45:03";
-        Long priceChange = Long.valueOf(160);
-        int quantity = 1000;
-        Long stockAmountChange = Long.valueOf(160000);
-        updateAssetsStock(userId, date, stockId, action, priceChange, quantity, stockAmountChange);
-        log.info("Update Assets Stock: " + action + ", 金額: " + stockAmountChange);
+//        // Update Assets Stock
+//        String action = "買進";
+//        String date = "2024-04-16 00:45:03";
+//        Long priceChange = Long.valueOf(160);
+//        int quantity = 1000;
+//        Long stockAmountChange = Long.valueOf(160000);
+//        updateAssetsStock(userId, date, stockId, action, priceChange, quantity, stockAmountChange);
+//        log.info("Update Assets Stock: " + action + ", 金額: " + stockAmountChange);
     }
 
     public Long getUserId(String userEmail){

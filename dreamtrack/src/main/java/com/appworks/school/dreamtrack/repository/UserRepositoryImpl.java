@@ -4,6 +4,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Repository
 public class UserRepositoryImpl implements UserRepository{
 
@@ -30,7 +32,12 @@ public class UserRepositoryImpl implements UserRepository{
     @Override
     public Long getUserId(String email) {
         String findUserId = "SELECT id FROM user WHERE email = ?";
-        Long userId = jdbcTemplate.queryForObject(findUserId, new Object[]{email}, Long.class);
-        return userId;
+        return jdbcTemplate.queryForObject(findUserId, new Object[]{email}, Long.class);
+    }
+
+    @Override
+    public List<Long> findAllUserId() {
+        String countUser = "SELECT COUNT(id) FROM user";
+        return jdbcTemplate.queryForList(countUser, Long.class);
     }
 }
