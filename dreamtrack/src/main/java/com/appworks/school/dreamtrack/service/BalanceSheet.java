@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
-//@SpringBootApplication
+@SpringBootApplication
 @Slf4j
 @ComponentScan(basePackages = {"com.appworks.school.dreamtrack"})
 public class BalanceSheet implements CommandLineRunner {
@@ -25,7 +25,7 @@ public class BalanceSheet implements CommandLineRunner {
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(Assets.class, args);
+        SpringApplication.run(BalanceSheet.class, args);
     }
 
     @Override

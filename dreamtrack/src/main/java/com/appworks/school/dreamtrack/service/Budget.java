@@ -49,8 +49,8 @@ public class Budget implements CommandLineRunner {
 //        log.info("Update Budget: " + budgetAmountChange);
 
 //        // Get budget
-//        Long budgetAmount = getTotalBudget(userId);
-//        log.info("Get budgetAmount from DB: " + budgetAmount);
+        Long budgetAmount = getTotalBudget(userId);
+        log.info("Get budgetAmount from DB: " + budgetAmount);
     }
 
     public Long getUserId(String userEmail){

@@ -14,6 +14,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -26,7 +28,8 @@ import java.util.Map;
 //@SpringBootApplication
 @Slf4j
 @ComponentScan(basePackages = {"com.appworks.school.dreamtrack"})
-public class WebCrawler implements CommandLineRunner {
+@EnableScheduling
+public class WebCrawler {
 
     private final WebCrawlerRepository webCrawlerRepository;
 
@@ -34,16 +37,17 @@ public class WebCrawler implements CommandLineRunner {
         this.webCrawlerRepository = webCrawlerRepository;
     }
 
-    public static void main(String[] args) {
-        SpringApplication.run(WebCrawler.class, args);
-    }
+//    public static void main(String[] args) {
+//        SpringApplication.run(WebCrawler.class, args);
+//    }
+//
+//    @Override
+//    public void run(String... args) throws Exception {
+//        getStockInfo();
+//        getExchange();
+//    }
 
-    @Override
-    public void run(String... args) throws Exception {
-        getStockInfo();
-        getExchange();
-    }
-
+    @Scheduled(cron = "0/10 * * 17 * *", zone = "Asia/Taipei")
     public void getStockInfo() {
         String stockApiUrl = "https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL";
         ResponseEntity<String> response = new RestTemplate().getForEntity(stockApiUrl, String.class);
@@ -80,6 +84,7 @@ public class WebCrawler implements CommandLineRunner {
         }
     }
 
+    @Scheduled(cron = "0/10 * * 17 * *", zone = "Asia/Taipei")
     public void getExchange() {
         List<Map<String, String>> exchangeRates = new ArrayList<>();
         try {

@@ -8,6 +8,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
+import java.util.List;
+import java.util.Map;
+
 //@SpringBootApplication
 @Slf4j
 @ComponentScan(basePackages = {"com.appworks.school.dreamtrack"})
@@ -56,8 +59,8 @@ public class Liability implements CommandLineRunner {
 //        updateLiabilities(userId, date, item, action, liabilitiesAmount);
 //        log.info("Update liabilities: " + item + action + liabilitiesAmount);
 
-//        List<Map<String, Object>> result = liabilitiesRepository.findAllLiabilities(userId);
-//        log.info("result: " + result);
+        List<Map<String, Object>> result = liabilitiesRepository.findAllLiabilities(userId);
+        log.info("result: " + result);
     }
 
     public Long getUserId(String userEmail){
