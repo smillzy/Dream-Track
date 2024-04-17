@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class WebCrawlerRepositoryImpl implements  WebCrawlerRepository{
+public class WebCrawlerRepositoryImpl implements WebCrawlerRepository {
 
     private final JdbcTemplate jdbcTemplate;
 

@@ -52,26 +52,26 @@ public class Liability implements CommandLineRunner {
 //        insertLiabilities(userId, item, action, liabilitiesAmount);
 //        log.info("Add liabilities: " + item + action + liabilitiesAmount);
 
-//        String item = "學貸";
-//        String action = "借款";
-//        Long liabilitiesAmount = Long.valueOf(6000);
-//        String date = "2024-04-15 20:54:00";
-//        updateLiabilities(userId, date, item, action, liabilitiesAmount);
-//        log.info("Update liabilities: " + item + action + liabilitiesAmount);
+        String item = "學貸";
+        String action = "借款";
+        Long liabilitiesAmount = Long.valueOf(7000);
+        Long id = Long.valueOf(1);
+        updateLiabilities(id, item, action, liabilitiesAmount);
+        log.info("Update liabilities: " + item + action + liabilitiesAmount);
 
         List<Map<String, Object>> result = liabilitiesRepository.findAllLiabilities(userId);
         log.info("result: " + result);
     }
 
-    public Long getUserId(String userEmail){
+    public Long getUserId(String userEmail) {
         return userRepository.getUserId(userEmail);
     }
 
-    public void insertLiabilities(Long id, String item, String action, Long liabilitiesAmount){
-        liabilitiesRepository.insertLiabilities(id, item, action, liabilitiesAmount);
+    public void insertLiabilities(Long userId, String item, String action, Long liabilitiesAmount) {
+        liabilitiesRepository.insertLiabilities(userId, item, action, liabilitiesAmount);
     }
 
-    public void updateLiabilities(Long id, String date, String item, String action, Long liabilitiesAmount){
-        liabilitiesRepository.updateLiabilities(id, date, item, action, liabilitiesAmount);
+    public void updateLiabilities(Long id, String item, String action, Long liabilitiesAmount) {
+        liabilitiesRepository.updateLiabilities(id, item, action, liabilitiesAmount);
     }
 }

@@ -1,7 +1,6 @@
 package com.appworks.school.dreamtrack.service;
 
 import com.appworks.school.dreamtrack.repository.AssetsRepository;
-import com.appworks.school.dreamtrack.repository.LiabilitiesRepository;
 import com.appworks.school.dreamtrack.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -47,13 +46,13 @@ public class Assets implements CommandLineRunner {
 //        log.info("Insert Current Deposit: " + currentDepositAmount);
 
 //        // Update Current Deposit
-//        Long currentDepositAmountChange = Long.valueOf(6000);
-//        String date = "2024-04-16 00:24:24";
-//        updateAssetsCurrentDeposit(userId, date, currentDepositAmountChange);
+//        Long currentDepositAmountChange = Long.valueOf(7000);
+//        Long id = Long.valueOf(1);;
+//        updateAssetsCurrentDeposit(id, currentDepositAmountChange);
 //        log.info("Update Current Deposit: " + currentDepositAmountChange);
 
-//        String currencyName = "美金";
-//        int currencyId = getCurrencyId(currencyName);
+        String currencyName = "美金";
+        int currencyId = getCurrencyId(currencyName);
 
 //        // Insert Foreign Currencies
 //        String action = "買進";
@@ -65,15 +64,15 @@ public class Assets implements CommandLineRunner {
 
 //        // Update Foreign Currencies
 //        String action = "買進";
-//        String date = "2024-04-16 00:35:34";
-//        Long quantityForeignChange = Long.valueOf(200);
-//        Long quantityTWDChange = Long.valueOf(6000);
+//        Long id = Long.valueOf(1);
+//        Long quantityForeignChange = Long.valueOf(300);
+//        Long quantityTWDChange = Long.valueOf(9000);
 //        Float rateChange = 30.0F;
-//        updateAssetsForeignCurrencies(userId, date, currencyId, action, quantityForeignChange, quantityTWDChange, rateChange);
+//        updateAssetsForeignCurrencies(id, currencyId, action, quantityForeignChange, quantityTWDChange, rateChange);
 //        log.info("Update Foreign Currencies: " + action + ", 美金: " + quantityForeignChange);
 
-//        String symbol = "0050";
-//        int stockId = getStockId(symbol);
+        String symbol = "0050";
+        int stockId = getStockId(symbol);
 
 //        // Insert Assets Stock
 //        String action = "買進";
@@ -85,55 +84,55 @@ public class Assets implements CommandLineRunner {
 
 //        // Update Assets Stock
 //        String action = "買進";
-//        String date = "2024-04-16 00:45:03";
+//        Long id = Long.valueOf(1);
 //        Long priceChange = Long.valueOf(160);
-//        int quantity = 1000;
-//        Long stockAmountChange = Long.valueOf(160000);
-//        updateAssetsStock(userId, date, stockId, action, priceChange, quantity, stockAmountChange);
+//        int quantity = 2000;
+//        Long stockAmountChange = Long.valueOf(320000);
+//        updateAssetsStock(id, stockId, action, priceChange, quantity, stockAmountChange);
 //        log.info("Update Assets Stock: " + action + ", 金額: " + stockAmountChange);
 
-        List<Map<String, Object>> assetsCurrentDeposit = assetsRepository.findAllAssetsCurrentDeposit(userId);
-        log.info("result assetsCurrentDeposit: " + assetsCurrentDeposit);
-        List<Map<String, Object>> assetsForeignCurrencies = assetsRepository.findAllAssetsForeignCurrencies(userId);
-        log.info("result assetsForeignCurrencies: " + assetsForeignCurrencies);
-        List<Map<String, Object>> assetsStock = assetsRepository.findAllAssetsStock(userId);
-        log.info("result assetsStock: " + assetsStock);
+//        List<Map<String, Object>> assetsCurrentDeposit = assetsRepository.findAllAssetsCurrentDeposit(userId);
+//        log.info("result assetsCurrentDeposit: " + assetsCurrentDeposit);
+//        List<Map<String, Object>> assetsForeignCurrencies = assetsRepository.findAllAssetsForeignCurrencies(userId);
+//        log.info("result assetsForeignCurrencies: " + assetsForeignCurrencies);
+//        List<Map<String, Object>> assetsStock = assetsRepository.findAllAssetsStock(userId);
+//        log.info("result assetsStock: " + assetsStock);
     }
 
-    public Long getUserId(String userEmail){
+    public Long getUserId(String userEmail) {
         return userRepository.getUserId(userEmail);
     }
 
-    public void insertAssetsCurrentDeposit(Long id, Long currentDepositAmount){
-        assetsRepository.insertAssetsCurrentDeposit(id, currentDepositAmount);
+    public void insertAssetsCurrentDeposit(Long userId, Long currentDepositAmount) {
+        assetsRepository.insertAssetsCurrentDeposit(userId, currentDepositAmount);
     }
 
-    public void updateAssetsCurrentDeposit(Long id, String date, Long currentDepositAmount){
-        assetsRepository.updateAssetsCurrentDeposit(id, date, currentDepositAmount);
+    public void updateAssetsCurrentDeposit(Long id, Long currentDepositAmount) {
+        assetsRepository.updateAssetsCurrentDeposit(id, currentDepositAmount);
     }
 
-    public int getCurrencyId(String currencyName){
+    public int getCurrencyId(String currencyName) {
         return assetsRepository.getCurrencyId(currencyName);
     }
 
-    public void insertAssetsForeignCurrencies(Long id, int currencyId, String action, Long quantityForeign, Long quantityTWD, Float rate){
-        assetsRepository.insertAssetsForeignCurrencies(id, currencyId, action, quantityForeign, quantityTWD, rate);
+    public void insertAssetsForeignCurrencies(Long userId, int currencyId, String action, Long quantityForeign, Long quantityTWD, Float rate) {
+        assetsRepository.insertAssetsForeignCurrencies(userId, currencyId, action, quantityForeign, quantityTWD, rate);
     }
 
-    public void updateAssetsForeignCurrencies(Long id, String date, int currencyId, String action, Long quantityForeign, Long quantityTWD, Float rate){
-        assetsRepository.updateAssetsForeignCurrencies(id, date, currencyId, action, quantityForeign, quantityTWD, rate);
+    public void updateAssetsForeignCurrencies(Long id, int currencyId, String action, Long quantityForeign, Long quantityTWD, Float rate) {
+        assetsRepository.updateAssetsForeignCurrencies(id, currencyId, action, quantityForeign, quantityTWD, rate);
     }
 
-    public int getStockId(String symbol){
+    public int getStockId(String symbol) {
         return assetsRepository.getStockId(symbol);
     }
 
-    public void insertAssetsStock(Long id, int stockId, String action, Long price, int quantity, Long stockAmount){
-        assetsRepository.insertAssetsStock(id, stockId, action, price, quantity, stockAmount);
+    public void insertAssetsStock(Long userId, int stockId, String action, Long price, int quantity, Long stockAmount) {
+        assetsRepository.insertAssetsStock(userId, stockId, action, price, quantity, stockAmount);
     }
 
-    public void updateAssetsStock(Long id, String date, int stockId, String action, Long price, int quantity, Long stockAmount){
-        assetsRepository.updateAssetsStock(id, date, stockId, action, price, quantity, stockAmount);
+    public void updateAssetsStock(Long id, int stockId, String action, Long price, int quantity, Long stockAmount) {
+        assetsRepository.updateAssetsStock(id, stockId, action, price, quantity, stockAmount);
     }
 
 }

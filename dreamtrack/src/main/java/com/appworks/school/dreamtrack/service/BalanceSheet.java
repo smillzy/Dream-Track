@@ -12,14 +12,14 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
-@SpringBootApplication
+//@SpringBootApplication
 @Slf4j
 @ComponentScan(basePackages = {"com.appworks.school.dreamtrack"})
 public class BalanceSheet implements CommandLineRunner {
     private final UserRepository userRepository;
     private final BalanceSheetRepository balanceSheetRepository;
 
-    public BalanceSheet(UserRepository userRepository,BalanceSheetRepository balanceSheetRepository) {
+    public BalanceSheet(UserRepository userRepository, BalanceSheetRepository balanceSheetRepository) {
         this.userRepository = userRepository;
         this.balanceSheetRepository = balanceSheetRepository;
     }
@@ -40,12 +40,17 @@ public class BalanceSheet implements CommandLineRunner {
 
 //        getBalanceSheet();
 
-        String date = "2024-04";
-        List<Map<String, Object>> BalanceSheetForOneMonth = balanceSheetRepository.getBalanceSheet(userId, date);
-        log.info("Get User Balance Sheet For One Month: " + BalanceSheetForOneMonth);
+//        String date = "2024-04";
+//        List<Map<String, Object>> BalanceSheetForOneMonth = balanceSheetRepository.getBalanceSheet(userId, date);
+//        log.info("Get User Balance Sheet For One Month: " + BalanceSheetForOneMonth);
+
+        String startDate = "2024-01";
+        String endDate = "2024-04";
+        List<Map<String, Object>> netIncome = balanceSheetRepository.getNetIncome(userId, startDate, endDate);
+        log.info("netIncome: " + netIncome);
     }
 
-//    @Scheduled(cron = "0/10 * * 16 * *", zone = "Asia/Taipei")
+    //    @Scheduled(cron = "0/10 * * 16 * *", zone = "Asia/Taipei")
     public void getBalanceSheet() {
         List<Long> userIds = userRepository.findAllUserId();
 
@@ -56,10 +61,10 @@ public class BalanceSheet implements CommandLineRunner {
                 balanceSheetRepository.insertBalanceSheet(
                         userId,
                         ((BigDecimal) financialData.get("assetCurrent")).longValue(),
-                        ((BigDecimal)  financialData.get("assetCurrencies")).longValue(),
-                        ((BigDecimal)  financialData.get("assetStock")).longValue(),
-                        ((BigDecimal)  financialData.get("liability")).longValue(),
-                        ((BigDecimal)  financialData.get("netIncome")).longValue()
+                        ((BigDecimal) financialData.get("assetCurrencies")).longValue(),
+                        ((BigDecimal) financialData.get("assetStock")).longValue(),
+                        ((BigDecimal) financialData.get("liability")).longValue(),
+                        ((BigDecimal) financialData.get("netIncome")).longValue()
                 );
                 log.info("Insert Balance Sheet userId: " + userId);
             }
@@ -67,8 +72,10 @@ public class BalanceSheet implements CommandLineRunner {
 
     }
 
-    public Long getUserId(String userEmail){
+    public Long getUserId(String userEmail) {
         return userRepository.getUserId(userEmail);
     }
+
+
 
 }
