@@ -98,6 +98,11 @@ public class TestClass implements CommandLineRunner {
 //        String endDate = "2024-04";
 //        Map<String, Integer> eachCategoryInterval = getTotalExpensesForEachCategory(userId, startDate, endDate);
 //        log.info("Total expanse of each category with an interval: " + eachCategoryInterval);
+
+        // Account detail
+        String date = "2024-04";
+        List<Map<String, Object>> result = accountingRepository.findAllAccounting(userId, date);
+        log.info("result: " + result);
     }
 
     public void insertUserInfo(String userName, String userEmail, String userPassword){

@@ -37,6 +37,12 @@ public class AccountingRepositoryImpl implements AccountingRepository{
     }
 
     @Override
+    public List<Map<String, Object>> findAllAccounting(Long id, String date) {
+        String selectSql = "SELECT * FROM accounting WHERE user_id = ? AND DATE_FORMAT(date, '%Y-%m') = ?;";
+        return jdbcTemplate.queryForList(selectSql, id, date);
+    }
+
+    @Override
     public Long getTotalExpenses(Long id, String date, String type) {
         String sql = """
             SELECT SUM(amount)

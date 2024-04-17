@@ -9,7 +9,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
-//@SpringBootApplication
+import java.util.List;
+import java.util.Map;
+
+@SpringBootApplication
 @Slf4j
 @ComponentScan(basePackages = {"com.appworks.school.dreamtrack"})
 public class Assets implements CommandLineRunner {
@@ -88,6 +91,13 @@ public class Assets implements CommandLineRunner {
 //        Long stockAmountChange = Long.valueOf(160000);
 //        updateAssetsStock(userId, date, stockId, action, priceChange, quantity, stockAmountChange);
 //        log.info("Update Assets Stock: " + action + ", 金額: " + stockAmountChange);
+
+        List<Map<String, Object>> assetsCurrentDeposit = assetsRepository.findAllAssetsCurrentDeposit(userId);
+        log.info("result assetsCurrentDeposit: " + assetsCurrentDeposit);
+        List<Map<String, Object>> assetsForeignCurrencies = assetsRepository.findAllAssetsForeignCurrencies(userId);
+        log.info("result assetsForeignCurrencies: " + assetsForeignCurrencies);
+        List<Map<String, Object>> assetsStock = assetsRepository.findAllAssetsStock(userId);
+        log.info("result assetsStock: " + assetsStock);
     }
 
     public Long getUserId(String userEmail){

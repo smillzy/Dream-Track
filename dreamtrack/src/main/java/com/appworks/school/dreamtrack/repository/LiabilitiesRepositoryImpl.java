@@ -35,7 +35,7 @@ public class LiabilitiesRepositoryImpl implements LiabilitiesRepository{
 
     @Override
     public List<Map<String, Object>> findAllLiabilities(Long id) {
-        String selectSql = "SELECT * FROM liabilities WHERE user_id = ?;";
+        String selectSql = "SELECT * FROM liabilities WHERE user_id = ? ORDER BY date DESC LIMIT 5;";
         return jdbcTemplate.queryForList(selectSql, id);
     }
 
