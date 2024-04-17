@@ -1,12 +1,10 @@
 package com.appworks.school.dreamtrack.service;
 
-import com.appworks.school.dreamtrack.repository.AccountingRepository;
 import com.appworks.school.dreamtrack.repository.BudgetRepository;
 import com.appworks.school.dreamtrack.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 //@SpringBootApplication
@@ -53,19 +51,19 @@ public class Budget implements CommandLineRunner {
         log.info("Get budgetAmount from DB: " + budgetAmount);
     }
 
-    public Long getUserId(String userEmail){
+    public Long getUserId(String userEmail) {
         return userRepository.getUserId(userEmail);
     }
 
-    public void insertBudget(Long id, Long budgetAmount){
-        budgetRepository.insertBudget(id, budgetAmount);
+    public void insertBudget(Long userId, Long budgetAmount) {
+        budgetRepository.insertBudget(userId, budgetAmount);
     }
 
-    public void updateBudget(Long id, Long budgetAmount){
-        budgetRepository.updateBudget(id, budgetAmount);
+    public void updateBudget(Long userId, Long budgetAmount) {
+        budgetRepository.updateBudget(userId, budgetAmount);
     }
 
-    public Long getTotalBudget(Long id){
+    public Long getTotalBudget(Long id) {
         return budgetRepository.getTotalBudget(id);
     }
 }
