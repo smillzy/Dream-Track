@@ -46,15 +46,9 @@ public class LiabilitiesController {
     public ResponseEntity<?> patchLiabilities(@Validated({LiabilitiesForm.PatchOperation.class, Default.class})
                                               @RequestBody LiabilitiesForm liabilitiesForm) {
         log.info(liabilitiesForm.toString());
-        Boolean isExist = userService.findUserId(liabilitiesForm.getUserId());
-        if (isExist) {
-            liabilitiesService.patchLiabilities(liabilitiesForm);
-            return ResponseEntity.status(HttpStatus.OK).build();
-        } else {
-            Map<String, Object> response = new HashMap<>();
-            response.put("error", "We don't have this user.");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-        }
+        liabilitiesService.patchLiabilities(liabilitiesForm);
+        return ResponseEntity.status(HttpStatus.OK).build();
+
     }
 
     @GetMapping("/detail")

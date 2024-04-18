@@ -41,16 +41,8 @@ public class BudgetController {
 
     @PatchMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> patchBudget(@Valid @RequestBody BudgetForm budgetForm) {
-        Boolean isExist = userService.findUserId(budgetForm.getUserId());
-
-        if (isExist) {
-            budgetService.updateBudget(budgetForm);
-            return ResponseEntity.status(HttpStatus.OK).build();
-        } else {
-            Map<String, Object> response = new HashMap<>();
-            response.put("error", "We don't have this user.");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-        }
+        budgetService.updateBudget(budgetForm);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @GetMapping
