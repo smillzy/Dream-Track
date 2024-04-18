@@ -8,4 +8,6 @@ public interface UserRepository {
     Long getUserId(String email);
 
     List<Long> findAllUserId();
+
+    Boolean findUserId(Long userId);
 }

@@ -1,7 +1,8 @@
-package com.appworks.school.dreamtrack.data.dto;
+package com.appworks.school.dreamtrack.data.form;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,17 +11,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class AccountingDto {
+public class BudgetForm {
+    @NotNull(message = "User ID cannot be null")
+    @JsonProperty("user_id")
+    private Long userId;
 
-    @JsonProperty("id")
-    private Long id;
-
-    @JsonProperty("name")
-    private String categoryName;
-
-    @JsonProperty("type")
-    private String type;
-
-    @JsonProperty("amount")
+    @NotNull(message = "Amount cannot be null")
+    @JsonProperty("budget_amount")
     private Long amount;
 }
