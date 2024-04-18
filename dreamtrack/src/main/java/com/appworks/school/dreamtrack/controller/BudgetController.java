@@ -2,6 +2,7 @@ package com.appworks.school.dreamtrack.controller;
 
 import com.appworks.school.dreamtrack.data.form.BudgetForm;
 import com.appworks.school.dreamtrack.service.BudgetService;
+import com.appworks.school.dreamtrack.service.UserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -16,15 +17,17 @@ import java.util.Map;
 @RequestMapping("api/v1/budget")
 @Slf4j
 public class BudgetController {
+    private final UserService userService;
     private final BudgetService budgetService;
 
-    public BudgetController(BudgetService budgetService) {
+    public BudgetController(UserService userService, BudgetService budgetService) {
+        this.userService = userService;
         this.budgetService = budgetService;
     }
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> postBudget(@Valid @RequestBody BudgetForm budgetForm) {
-        Boolean isExist = budgetService.findUserId(budgetForm.getUserId());
+        Boolean isExist = userService.findUserId(budgetForm.getUserId());
 
         if (isExist) {
             budgetService.insertBudget(budgetForm);
@@ -38,7 +41,7 @@ public class BudgetController {
 
     @PatchMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> patchBudget(@Valid @RequestBody BudgetForm budgetForm) {
-        Boolean isExist = budgetService.findUserId(budgetForm.getUserId());
+        Boolean isExist = userService.findUserId(budgetForm.getUserId());
 
         if (isExist) {
             budgetService.updateBudget(budgetForm);
@@ -52,7 +55,7 @@ public class BudgetController {
 
     @GetMapping
     public ResponseEntity<?> patchBudget(@RequestParam(name = "id") long userId) {
-        Boolean isExist = budgetService.findUserId(userId);
+        Boolean isExist = userService.findUserId(userId);
 
         if (isExist) {
             Map<String, Long> result = budgetService.getTotalBudget(userId);
