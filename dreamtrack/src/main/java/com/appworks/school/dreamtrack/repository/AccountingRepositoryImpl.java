@@ -40,17 +40,16 @@ public class AccountingRepositoryImpl implements AccountingRepository {
     }
 
     @Override
-    public Long getTotalExpenses(Long userId, String date, String type) {
+    public List<Map<String, Object>> getTotalExpenses(Long userId, String date) {
         String sql = """
-                    SELECT SUM(amount)
+                    SELECT accounting_category.type, SUM(accounting.amount) AS total_amount
                     FROM accounting
                     JOIN accounting_category ON accounting.category_id = accounting_category.id
-                    WHERE accounting_category.type = ?
-                    AND DATE_FORMAT(date, '%Y-%m') = ?
-                    AND user_id = ?
+                    WHERE DATE_FORMAT(accounting.date, '%Y-%m') = ?
+                      AND accounting.user_id = ?
+                    GROUP BY accounting_category.type;
                 """;
-        Long sumExpenses = jdbcTemplate.queryForObject(sql, Long.class, type, date, userId);
-        return sumExpenses != null ? sumExpenses : 0;
+        return jdbcTemplate.queryForList(sql, date, userId);
     }
 
     @Override

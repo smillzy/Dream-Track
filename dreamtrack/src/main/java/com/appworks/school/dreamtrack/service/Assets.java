@@ -91,12 +91,12 @@ public class Assets implements CommandLineRunner {
 //        updateAssetsStock(id, stockId, action, priceChange, quantity, stockAmountChange);
 //        log.info("Update Assets Stock: " + action + ", 金額: " + stockAmountChange);
 
-//        List<Map<String, Object>> assetsCurrentDeposit = assetsRepository.findAllAssetsCurrentDeposit(userId);
-//        log.info("result assetsCurrentDeposit: " + assetsCurrentDeposit);
-//        List<Map<String, Object>> assetsForeignCurrencies = assetsRepository.findAllAssetsForeignCurrencies(userId);
-//        log.info("result assetsForeignCurrencies: " + assetsForeignCurrencies);
-//        List<Map<String, Object>> assetsStock = assetsRepository.findAllAssetsStock(userId);
-//        log.info("result assetsStock: " + assetsStock);
+        List<Map<String, Object>> assetsCurrentDeposit = assetsRepository.findAllAssetsCurrentDeposit(userId);
+        log.info("result assetsCurrentDeposit: " + assetsCurrentDeposit);
+        List<Map<String, Object>> assetsForeignCurrencies = assetsRepository.findAllAssetsForeignCurrencies(userId);
+        log.info("result assetsForeignCurrencies: " + assetsForeignCurrencies);
+        List<Map<String, Object>> assetsStock = assetsRepository.findAllAssetsStock(userId);
+        log.info("result assetsStock: " + assetsStock);
     }
 
     public Long getUserId(String userEmail) {

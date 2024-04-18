@@ -12,7 +12,7 @@ public interface AccountingRepository {
 
     List<Map<String, Object>> findAllAccounting(Long userId, String date);
 
-    Long getTotalExpenses(Long userId, String date, String type);
+    List<Map<String, Object>> getTotalExpenses(Long userId, String date);
 
     Long getTotalExpenses(Long userId, String startDate, String endDate, String type);
 

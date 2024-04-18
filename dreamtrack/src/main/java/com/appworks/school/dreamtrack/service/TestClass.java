@@ -72,9 +72,9 @@ public class TestClass implements CommandLineRunner {
         log.info("Delete Account Record id : " + id);
 //
 //        // Account query total expanse
-//        String type = "支出";
+
 //        String month = "2024-04";
-//        Long totalExpenses = getTotalExpenses(userId, month, type);
+//        List<Map<String, Object>> totalExpenses = getTotalExpenses(userId, month);
 //        log.info("Total expanse: " + totalExpenses);
 
 //        // Account query total expanse for lots of month
@@ -85,9 +85,9 @@ public class TestClass implements CommandLineRunner {
 //        log.info("Total expanse: " + totalExpenses);
 
 //        // Account query total expanse for each category
-//        String date = "2024-04";
-//        Map<String, Integer> eachCategory = getTotalExpensesByEachCategory(userId, date);
-//        log.info("Total expanse of eachCategory: " + eachCategory);
+        String date = "2024-04";
+        Map<String, Integer> eachCategory = getTotalExpensesByEachCategory(userId, date);
+        log.info("Total expanse of eachCategory: " + eachCategory);
 
 //        // Account query total expanse for each category with an interval
 //        String startDate = "2024-03";
@@ -96,9 +96,9 @@ public class TestClass implements CommandLineRunner {
 //        log.info("Total expanse of each category with an interval: " + eachCategoryInterval);
 
 //         Account detail
-        String date = "2024-04";
-        List<Map<String, Object>> result = accountingRepository.findAllAccounting(userId, date);
-        log.info("result: " + result);
+//        String date = "2024-04";
+//        List<Map<String, Object>> result = accountingRepository.findAllAccounting(userId, date);
+//        log.info("result: " + result);
     }
 
     public void insertUserInfo(String userName, String userEmail, String userPassword) {
@@ -125,8 +125,8 @@ public class TestClass implements CommandLineRunner {
         accountingRepository.deleteAccountingRecord(id);
     }
 
-    public Long getTotalExpenses(Long id, String date, String type) {
-        return accountingRepository.getTotalExpenses(id, date, type);
+    public List<Map<String, Object>> getTotalExpenses(Long id, String date) {
+        return accountingRepository.getTotalExpenses(id, date);
     }
 
     public Long getTotalExpenses(Long id, String startDate, String endDate, String type) {
