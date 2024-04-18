@@ -1,12 +1,10 @@
 package com.appworks.school.dreamtrack.service;
 
+import com.appworks.school.dreamtrack.data.dto.BudgetDto;
 import com.appworks.school.dreamtrack.data.form.BudgetForm;
 import com.appworks.school.dreamtrack.model.Budget;
 import com.appworks.school.dreamtrack.repository.BudgetRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 public class BudgetServiceImpl implements BudgetService {
@@ -30,11 +28,11 @@ public class BudgetServiceImpl implements BudgetService {
     }
 
     @Override
-    public Map<String, Long> getTotalBudget(Long userId) {
+    public BudgetDto getTotalBudget(Long userId) {
         Long totalBudget = budgetRepository.getTotalBudget(userId);
-
-        Map<String, Long> response = new HashMap<>();
-        response.put("budget_amount", totalBudget);
-        return response;
+        if (totalBudget == null) {
+            totalBudget = 0L;
+        }
+        return new BudgetDto(totalBudget);
     }
 }

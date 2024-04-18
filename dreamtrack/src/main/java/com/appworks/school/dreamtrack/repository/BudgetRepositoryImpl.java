@@ -27,7 +27,11 @@ public class BudgetRepositoryImpl implements BudgetRepository {
     @Override
     public Long getTotalBudget(Long userId) {
         String sql = "SELECT budget_amount FROM budget WHERE user_id = ?";
-        return jdbcTemplate.queryForObject(sql, Long.class, userId);
+        try {
+            return jdbcTemplate.queryForObject(sql, Long.class, userId);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 }

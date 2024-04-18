@@ -1,5 +1,6 @@
 package com.appworks.school.dreamtrack.controller;
 
+import com.appworks.school.dreamtrack.data.dto.BudgetDto;
 import com.appworks.school.dreamtrack.data.form.BudgetForm;
 import com.appworks.school.dreamtrack.service.BudgetService;
 import com.appworks.school.dreamtrack.service.UserService;
@@ -45,15 +46,15 @@ public class BudgetController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @GetMapping
-    public ResponseEntity<?> patchBudget(@RequestParam(name = "id") long userId) {
+    @GetMapping("/detail")
+    public ResponseEntity<?> getBudget(@RequestParam(name = "id") long userId) {
         Boolean isExist = userService.findUserId(userId);
 
         if (isExist) {
-            Map<String, Long> result = budgetService.getTotalBudget(userId);
+            BudgetDto budget = budgetService.getTotalBudget(userId);
 
             Map<String, Object> response = new HashMap<>();
-            response.put("data", result);
+            response.put("data", budget);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } else {
             Map<String, Object> response = new HashMap<>();
