@@ -1,5 +1,6 @@
 package com.appworks.school.dreamtrack.controller;
 
+import com.appworks.school.dreamtrack.data.dto.LiabilitiesDto;
 import com.appworks.school.dreamtrack.data.form.LiabilitiesForm;
 import com.appworks.school.dreamtrack.service.LiabilitiesService;
 import com.appworks.school.dreamtrack.service.UserService;
@@ -55,7 +56,7 @@ public class LiabilitiesController {
     public ResponseEntity<?> GetLiabilities(@RequestParam(name = "id") Long userId) {
         Boolean isExist = userService.findUserId(userId);
         if (isExist) {
-            List<Map<String, Object>> liabilitiesDetail = liabilitiesService.findAllLiabilities(userId);
+            List<LiabilitiesDto> liabilitiesDetail = liabilitiesService.findAllLiabilities(userId);
 
             Map<String, Object> response = new HashMap<>();
             response.put("data", liabilitiesDetail);

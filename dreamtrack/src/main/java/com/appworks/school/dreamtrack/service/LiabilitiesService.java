@@ -1,9 +1,9 @@
 package com.appworks.school.dreamtrack.service;
 
+import com.appworks.school.dreamtrack.data.dto.LiabilitiesDto;
 import com.appworks.school.dreamtrack.data.form.LiabilitiesForm;
 
 import java.util.List;
-import java.util.Map;
 
 public interface LiabilitiesService {
 
@@ -11,6 +11,6 @@ public interface LiabilitiesService {
 
     void patchLiabilities(LiabilitiesForm liabilitiesForm);
 
-    List<Map<String, Object>> findAllLiabilities(Long userId);
+    List<LiabilitiesDto> findAllLiabilities(Long userId);
 
 }

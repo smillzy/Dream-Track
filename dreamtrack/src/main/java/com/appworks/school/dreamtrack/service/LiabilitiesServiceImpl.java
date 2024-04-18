@@ -1,14 +1,12 @@
 package com.appworks.school.dreamtrack.service;
 
+import com.appworks.school.dreamtrack.data.dto.LiabilitiesDto;
 import com.appworks.school.dreamtrack.data.form.LiabilitiesForm;
 import com.appworks.school.dreamtrack.model.Liabilities;
 import com.appworks.school.dreamtrack.repository.LiabilitiesRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class LiabilitiesServiceImpl implements LiabilitiesService {
@@ -34,16 +32,8 @@ public class LiabilitiesServiceImpl implements LiabilitiesService {
     }
 
     @Override
-    public List<Map<String, Object>> findAllLiabilities(Long userId) {
-        List<Map<String, Object>> results = liabilitiesRepository.findAllLiabilities(userId);
-        for (Map<String, Object> record : results) {
-            if (record.get("date") != null) {
-                LocalDateTime dateTime = (LocalDateTime) record.get("date");
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                String formattedDate = dateTime.format(formatter);
-                record.put("date", formattedDate);
-            }
-        }
+    public List<LiabilitiesDto> findAllLiabilities(Long userId) {
+        List<LiabilitiesDto> results = liabilitiesRepository.findAllLiabilities(userId);
         return results;
     }
 }

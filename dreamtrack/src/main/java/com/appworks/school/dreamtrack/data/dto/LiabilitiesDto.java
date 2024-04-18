@@ -1,7 +1,6 @@
 package com.appworks.school.dreamtrack.data.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,19 +14,15 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class AccountingDto implements RowMapper<AccountingDto> {
+public class LiabilitiesDto implements RowMapper<LiabilitiesDto> {
 
-    @JsonProperty("id")
-    private Long id;
+    @JsonProperty("item")
+    private String item;
 
-    @JsonProperty("name")
-    private String categoryName;
+    @JsonProperty("action")
+    private String action;
 
-    @JsonProperty("type")
-    private String type;
-
-    @JsonProperty("amount")
+    @JsonProperty("liability_amount")
     private Long amount;
 
     @JsonProperty("date")
@@ -35,12 +30,12 @@ public class AccountingDto implements RowMapper<AccountingDto> {
     private LocalDateTime date;
 
     @Override
-    public AccountingDto mapRow(ResultSet rs, int rowNum) throws SQLException {
-        AccountingDto dto = new AccountingDto();
+    public LiabilitiesDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+        LiabilitiesDto dto = new LiabilitiesDto();
+        dto.setItem(rs.getString("item"));
+        dto.setAction(rs.getString("action"));
+        dto.setAmount(rs.getLong("liability_amount"));
         dto.setDate(rs.getTimestamp("date").toLocalDateTime());
-        dto.setType(rs.getString("type"));
-        dto.setCategoryName(rs.getString("name"));
-        dto.setAmount(rs.getLong("amount"));
         return dto;
     }
 }
