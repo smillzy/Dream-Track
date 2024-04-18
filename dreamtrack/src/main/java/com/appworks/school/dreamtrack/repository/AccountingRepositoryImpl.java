@@ -34,8 +34,21 @@ public class AccountingRepositoryImpl implements AccountingRepository {
     }
 
     @Override
+    public Boolean findAccountingId(Long id) {
+        String findAccountingId = "SELECT COUNT(*) FROM accounting WHERE id = ?";
+        Long count = jdbcTemplate.queryForObject(findAccountingId, Long.class, id);
+        return count != null && count > 0;
+    }
+
+    @Override
     public List<Map<String, Object>> findAllAccounting(Long userId, String date) {
-        String selectSql = "SELECT * FROM accounting WHERE user_id = ? AND DATE_FORMAT(date, '%Y-%m') = ?;";
+        String selectSql = """
+                    SELECT a.`date`, ac.`type`, ac.`name`, a.amount 
+                    FROM accounting AS a
+                    JOIN accounting_category AS ac ON a.category_id = ac.id
+                    WHERE user_id = ?
+                    AND DATE_FORMAT(date, '%Y-%m') = ?;
+                """;
         return jdbcTemplate.queryForList(selectSql, userId, date);
     }
 
@@ -46,24 +59,23 @@ public class AccountingRepositoryImpl implements AccountingRepository {
                     FROM accounting
                     JOIN accounting_category ON accounting.category_id = accounting_category.id
                     WHERE DATE_FORMAT(accounting.date, '%Y-%m') = ?
-                      AND accounting.user_id = ?
+                    AND accounting.user_id = ?
                     GROUP BY accounting_category.type;
                 """;
         return jdbcTemplate.queryForList(sql, date, userId);
     }
 
     @Override
-    public Long getTotalExpenses(Long userId, String startDate, String endDate, String type) {
+    public List<Map<String, Object>> getTotalExpenses(Long userId, String startDate, String endDate) {
         String sql = """
                     SELECT SUM(amount)
                     FROM accounting
                     JOIN accounting_category ON accounting.category_id = accounting_category.id
-                    WHERE accounting_category.type = ?
-                    AND DATE_FORMAT(date, '%Y-%m') BETWEEN ? AND ?
-                    AND user_id = ?;
+                    WHERE DATE_FORMAT(date, '%Y-%m') BETWEEN ? AND ?
+                    AND user_id = ?
+                    GROUP BY accounting_category.type;
                 """;
-        Long sumExpenses = jdbcTemplate.queryForObject(sql, Long.class, type, startDate, endDate, userId);
-        return sumExpenses != null ? sumExpenses : 0;
+        return jdbcTemplate.queryForList(sql, startDate, endDate, userId);
     }
 
     @Override

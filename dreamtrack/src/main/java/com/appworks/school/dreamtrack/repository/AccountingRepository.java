@@ -10,11 +10,13 @@ public interface AccountingRepository {
 
     void deleteAccountingRecord(Long id);
 
+    Boolean findAccountingId(Long id);
+
     List<Map<String, Object>> findAllAccounting(Long userId, String date);
 
     List<Map<String, Object>> getTotalExpenses(Long userId, String date);
 
-    Long getTotalExpenses(Long userId, String startDate, String endDate, String type);
+    List<Map<String, Object>> getTotalExpenses(Long userId, String startDate, String endDate);
 
     List<Map<String, Object>> getTotalExpensesByEachCategory(Long userId, String date);
 
