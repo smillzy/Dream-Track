@@ -1,5 +1,6 @@
 package com.appworks.school.dreamtrack.controller;
 
+import com.appworks.school.dreamtrack.data.dto.AccountingDto;
 import com.appworks.school.dreamtrack.data.form.AccountingForm;
 import com.appworks.school.dreamtrack.service.AccountingService;
 import com.appworks.school.dreamtrack.service.UserService;
@@ -71,7 +72,7 @@ public class AccountingController {
                                            @RequestParam(name = "date") String date) {
         Boolean isExist = userService.findUserId(userId);
         if (isExist) {
-            List<Map<String, Object>> accountingDetail = accountingService.findAllAccounting(userId, date);
+            List<AccountingDto> accountingDetail = accountingService.findAllAccounting(userId, date);
 
             Map<String, Object> response = new HashMap<>();
             response.put("data", accountingDetail);

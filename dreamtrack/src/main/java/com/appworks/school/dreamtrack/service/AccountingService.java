@@ -1,9 +1,9 @@
 package com.appworks.school.dreamtrack.service;
 
+import com.appworks.school.dreamtrack.data.dto.AccountingDto;
 import com.appworks.school.dreamtrack.data.form.AccountingForm;
 
 import java.util.List;
-import java.util.Map;
 
 public interface AccountingService {
     Long findCategoryId(String categoryName, String type);
@@ -16,5 +16,5 @@ public interface AccountingService {
 
     void deleteAccounting(long id);
 
-    List<Map<String, Object>> findAllAccounting(Long userId, String date);
+    List<AccountingDto> findAllAccounting(Long userId, String date);
 }

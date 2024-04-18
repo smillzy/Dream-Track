@@ -1,14 +1,12 @@
 package com.appworks.school.dreamtrack.service;
 
+import com.appworks.school.dreamtrack.data.dto.AccountingDto;
 import com.appworks.school.dreamtrack.data.form.AccountingForm;
 import com.appworks.school.dreamtrack.model.Accounting;
 import com.appworks.school.dreamtrack.repository.AccountingRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class AccountingServiceImpl implements AccountingService {
@@ -51,16 +49,7 @@ public class AccountingServiceImpl implements AccountingService {
     }
 
     @Override
-    public List<Map<String, Object>> findAllAccounting(Long userId, String date) {
-        List<Map<String, Object>> results = accountingRepository.findAllAccounting(userId, date);
-        for (Map<String, Object> record : results) {
-            if (record.get("date") != null) {
-                LocalDateTime dateTime = (LocalDateTime) record.get("date");
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                String formattedDate = dateTime.format(formatter);
-                record.put("date", formattedDate);
-            }
-        }
-        return results;
+    public List<AccountingDto> findAllAccounting(Long userId, String date) {
+        return accountingRepository.findAllAccounting(userId, date);
     }
 }

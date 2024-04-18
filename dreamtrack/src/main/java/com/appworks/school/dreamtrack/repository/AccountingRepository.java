@@ -1,5 +1,7 @@
 package com.appworks.school.dreamtrack.repository;
 
+import com.appworks.school.dreamtrack.data.dto.AccountingDto;
+
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +14,7 @@ public interface AccountingRepository {
 
     Boolean findAccountingId(Long id);
 
-    List<Map<String, Object>> findAllAccounting(Long userId, String date);
+    List<AccountingDto> findAllAccounting(Long userId, String date);
 
     List<Map<String, Object>> getTotalExpenses(Long userId, String date);
 

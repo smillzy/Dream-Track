@@ -1,5 +1,6 @@
 package com.appworks.school.dreamtrack.repository;
 
+import com.appworks.school.dreamtrack.data.dto.AccountingDto;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -41,7 +42,7 @@ public class AccountingRepositoryImpl implements AccountingRepository {
     }
 
     @Override
-    public List<Map<String, Object>> findAllAccounting(Long userId, String date) {
+    public List<AccountingDto> findAllAccounting(Long userId, String date) {
         String selectSql = """
                     SELECT a.`date`, ac.`type`, ac.`name`, a.amount 
                     FROM accounting AS a
@@ -49,7 +50,7 @@ public class AccountingRepositoryImpl implements AccountingRepository {
                     WHERE user_id = ?
                     AND DATE_FORMAT(date, '%Y-%m') = ?;
                 """;
-        return jdbcTemplate.queryForList(selectSql, userId, date);
+        return jdbcTemplate.query(selectSql, new AccountingDto(), userId, date);
     }
 
     @Override
