@@ -6,6 +6,9 @@ import com.appworks.school.dreamtrack.repository.BudgetRepository;
 import com.appworks.school.dreamtrack.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 public class BudgetServiceImpl implements BudgetService {
 
@@ -33,5 +36,14 @@ public class BudgetServiceImpl implements BudgetService {
     public void updateBudget(BudgetForm budgetForm) {
         Budget b = Budget.from(budgetForm);
         budgetRepository.updateBudget(b.getUserId(), b.getAmount());
+    }
+
+    @Override
+    public Map<String, Long> getTotalBudget(Long userId) {
+        Long totalBudget = budgetRepository.getTotalBudget(userId);
+
+        Map<String, Long> response = new HashMap<>();
+        response.put("budget_amount", totalBudget);
+        return response;
     }
 }

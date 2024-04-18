@@ -49,4 +49,21 @@ public class BudgetController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
+
+    @GetMapping
+    public ResponseEntity<?> patchBudget(@RequestParam(name = "id") long userId) {
+        Boolean isExist = budgetService.findUserId(userId);
+
+        if (isExist) {
+            Map<String, Long> result = budgetService.getTotalBudget(userId);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("data", result);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } else {
+            Map<String, Object> response = new HashMap<>();
+            response.put("error", "We don't have this user.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+    }
 }
