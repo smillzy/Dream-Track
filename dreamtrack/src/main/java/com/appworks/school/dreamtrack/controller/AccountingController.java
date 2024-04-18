@@ -2,6 +2,7 @@ package com.appworks.school.dreamtrack.controller;
 
 import com.appworks.school.dreamtrack.data.form.AccountingForm;
 import com.appworks.school.dreamtrack.service.AccountingService;
+import jakarta.validation.groups.Default;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,7 +27,7 @@ public class AccountingController {
 
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> postAccounting(@Validated(AccountingForm.PostOperation.class)
+    public ResponseEntity<?> postAccounting(@Validated({AccountingForm.PostOperation.class, Default.class})
                                             @RequestBody AccountingForm accountingForm) {
         log.info(accountingForm.toString());
         accountingService.saveAccounting(accountingForm);
@@ -34,7 +35,7 @@ public class AccountingController {
     }
 
     @PatchMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> patchAccounting(@Validated(AccountingForm.PatchOperation.class)
+    public ResponseEntity<?> patchAccounting(@Validated({AccountingForm.PatchOperation.class, Default.class})
                                              @RequestBody AccountingForm accountingForm) {
         log.info(accountingForm.toString());
         accountingService.patchAccounting(accountingForm);
