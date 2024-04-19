@@ -1,9 +1,10 @@
 package com.appworks.school.dreamtrack.repository;
 
 import com.appworks.school.dreamtrack.data.dto.AccountingDto;
+import com.appworks.school.dreamtrack.data.dto.ExpensesCategoryDto;
+import com.appworks.school.dreamtrack.data.dto.TotalRevenueAndExpensesDto;
 
 import java.util.List;
-import java.util.Map;
 
 public interface AccountingRepository {
     Long findCategoryId(String categoryName, String type);
@@ -16,13 +17,13 @@ public interface AccountingRepository {
 
     List<AccountingDto> findAllAccounting(Long userId, String date);
 
-    List<Map<String, Object>> getTotalExpenses(Long userId, String date);
+    TotalRevenueAndExpensesDto getTotalRevenueAndExpenses(Long userId, String date);
 
-    List<Map<String, Object>> getTotalExpenses(Long userId, String startDate, String endDate);
+    TotalRevenueAndExpensesDto getTotalRevenueAndExpenses(Long userId, String startDate, String endDate);
 
-    List<Map<String, Object>> getTotalExpensesByEachCategory(Long userId, String date);
+    List<ExpensesCategoryDto> getTotalExpensesByEachCategory(Long userId, String date);
 
-    List<Map<String, Object>> getTotalExpensesForEachCategory(Long userId, String startDate, String endDate);
+    List<ExpensesCategoryDto> getTotalExpensesForEachCategory(Long userId, String startDate, String endDate);
 
     void updateAccountingRecord(Long id, Long categoryId, Long amount);
 }

@@ -29,10 +29,7 @@ public class BudgetServiceImpl implements BudgetService {
 
     @Override
     public BudgetDto getTotalBudget(Long userId) {
-        Long totalBudget = budgetRepository.getTotalBudget(userId);
-        if (totalBudget == null) {
-            totalBudget = 0L;
-        }
-        return new BudgetDto(totalBudget);
+        BudgetDto totalBudget = budgetRepository.getTotalBudget(userId);
+        return totalBudget;
     }
 }
