@@ -1,5 +1,9 @@
 package com.appworks.school.dreamtrack.repository;
 
+import com.appworks.school.dreamtrack.data.dto.BalanceSheetDto;
+import com.appworks.school.dreamtrack.data.dto.BalanceSheetIntervalDto;
+import com.appworks.school.dreamtrack.data.dto.NetIncomeDto;
+
 import java.util.List;
 import java.util.Map;
 
@@ -8,10 +12,10 @@ public interface BalanceSheetRepository {
 
     void insertBalanceSheet(Long userId, Long assetCurrent, Long assetCurrencies, Long stock, Long liability, Long netIncome);
 
-    List<Map<String, Object>> getBalanceSheet(Long userId, String date);
+    BalanceSheetDto getBalanceSheet(Long userId, String date);
 
-    List<Map<String, Object>> getBalanceSheet(Long userId, String startDate, String endDate);
+    BalanceSheetIntervalDto getBalanceSheet(Long userId, String startDate, String endDate);
 
-    List<Map<String, Object>> getNetIncome(Long userId, String startDate, String endDate);
+    List<NetIncomeDto> getNetIncome(Long userId, String startDate, String endDate);
 
 }

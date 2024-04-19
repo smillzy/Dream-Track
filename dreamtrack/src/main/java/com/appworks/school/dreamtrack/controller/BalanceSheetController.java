@@ -1,6 +1,6 @@
 package com.appworks.school.dreamtrack.controller;
 
-import com.appworks.school.dreamtrack.service.ExpensesService;
+import com.appworks.school.dreamtrack.service.BalanceSheetService;
 import com.appworks.school.dreamtrack.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -14,29 +14,29 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("api/v1/expense")
+@RequestMapping("api/v1/balance-sheet")
 @Slf4j
-public class ExpensesController {
+public class BalanceSheetController {
 
     private final UserService userService;
 
-    private final ExpensesService expensesService;
+    private final BalanceSheetService balanceSheetService;
 
-    public ExpensesController(UserService userService, ExpensesService expensesService) {
+    public BalanceSheetController(UserService userService, BalanceSheetService balanceSheetService) {
         this.userService = userService;
-        this.expensesService = expensesService;
+        this.balanceSheetService = balanceSheetService;
     }
 
     @GetMapping("/single")
-    public ResponseEntity<?> GetExpenseSingle(@RequestParam(name = "user-id") Long userId,
-                                              @RequestParam(name = "date") String date) {
+    public ResponseEntity<?> GetBalanceSheetSingle(@RequestParam(name = "user-id") Long userId,
+                                                   @RequestParam(name = "date") String date) {
         Boolean isExist = userService.findUserId(userId);
         if (isExist) {
 
-            Map<String, Object> expenses = expensesService.findExpenses(userId, date);
+            Map<String, Object> balanceSheet = balanceSheetService.findBalanceSheet(userId, date);
 
             Map<String, Object> response = new HashMap<>();
-            response.put("data", expenses);
+            response.put("data", balanceSheet);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } else {
             Map<String, Object> response = new HashMap<>();
@@ -46,16 +46,15 @@ public class ExpensesController {
     }
 
     @GetMapping("/interval")
-    public ResponseEntity<?> GetExpenseInterval(@RequestParam(name = "user-id") Long userId,
-                                                @RequestParam(name = "start-date") String startDate,
-                                                @RequestParam(name = "end-date") String endDate) {
+    public ResponseEntity<?> GetBalanceSheetInterval(@RequestParam(name = "user-id") Long userId,
+                                                     @RequestParam(name = "end-date") String endDate) {
         Boolean isExist = userService.findUserId(userId);
         if (isExist) {
 
-            Map<String, Object> expensesInterval = expensesService.findExpensesInterval(userId, startDate, endDate);
+            Map<String, Object> balanceSheetInterval = balanceSheetService.findBalanceSheetInterval(userId, endDate);
 
             Map<String, Object> response = new HashMap<>();
-            response.put("data", expensesInterval);
+            response.put("data", balanceSheetInterval);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } else {
             Map<String, Object> response = new HashMap<>();
