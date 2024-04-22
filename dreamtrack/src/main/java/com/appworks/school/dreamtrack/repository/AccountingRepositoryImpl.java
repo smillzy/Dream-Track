@@ -45,7 +45,7 @@ public class AccountingRepositoryImpl implements AccountingRepository {
     @Override
     public List<AccountingDto> findAllAccounting(Long userId, String date) {
         String selectSql = """
-                    SELECT a.`date`, ac.`type`, ac.`name`, a.amount 
+                    SELECT a.id, a.`date`, ac.`type`, ac.`name`, a.amount 
                     FROM accounting AS a
                     JOIN accounting_category AS ac ON a.category_id = ac.id
                     WHERE user_id = ?

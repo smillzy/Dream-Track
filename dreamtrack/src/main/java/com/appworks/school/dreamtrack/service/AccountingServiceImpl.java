@@ -4,11 +4,13 @@ import com.appworks.school.dreamtrack.data.dto.AccountingDto;
 import com.appworks.school.dreamtrack.data.form.AccountingForm;
 import com.appworks.school.dreamtrack.model.Accounting;
 import com.appworks.school.dreamtrack.repository.AccountingRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Slf4j
 public class AccountingServiceImpl implements AccountingService {
 
     private final AccountingRepository accountingRepository;
@@ -24,10 +26,13 @@ public class AccountingServiceImpl implements AccountingService {
 
     @Override
     public void saveAccounting(AccountingForm accountingForm) {
+        log.info("accountingForm: " + accountingForm);
         Accounting a = Accounting.from(accountingForm);
         a.setUserId(accountingForm.getUserId());
         Long CategoryId = findCategoryId(a.getCategoryName(), a.getType());
+        log.info("a: " + a);
         accountingRepository.insertAccountingRecord(a.getUserId(), CategoryId, a.getAmount());
+        log.info("finish");
     }
 
     @Override

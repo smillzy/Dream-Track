@@ -19,16 +19,16 @@ import java.time.LocalDateTime;
 public class AccountingDto implements RowMapper<AccountingDto> {
 
     @JsonProperty("id")
-    private Long id;
+    private String id;
 
     @JsonProperty("name")
-    private String categoryName;
+    private String name;
 
     @JsonProperty("type")
     private String type;
 
-    @JsonProperty("amount")
-    private Long amount;
+    @JsonProperty("description")
+    private String description;
 
     @JsonProperty("date")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -37,10 +37,11 @@ public class AccountingDto implements RowMapper<AccountingDto> {
     @Override
     public AccountingDto mapRow(ResultSet rs, int rowNum) throws SQLException {
         AccountingDto dto = new AccountingDto();
+        dto.setId(String.valueOf(rs.getLong("id")));
+        dto.setName(rs.getString("type") + " " + rs.getString("name"));
+        dto.setDescription(String.valueOf(rs.getLong("amount")));
         dto.setDate(rs.getTimestamp("date").toLocalDateTime());
         dto.setType(rs.getString("type"));
-        dto.setCategoryName(rs.getString("name"));
-        dto.setAmount(rs.getLong("amount"));
         return dto;
     }
 }

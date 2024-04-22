@@ -32,17 +32,18 @@ public class AccountingController {
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> postAccounting(@Validated({AccountingForm.PostOperation.class, Default.class})
-                                            @RequestBody AccountingForm accountingForm) {
-        Boolean isExist = userService.findUserId(accountingForm.getUserId());
-        if (isExist) {
-            log.info(accountingForm.toString());
-            accountingService.saveAccounting(accountingForm);
-            return ResponseEntity.status(HttpStatus.OK).build();
-        } else {
-            Map<String, Object> response = new HashMap<>();
-            response.put("error", "We don't have this user.");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+                                            @RequestBody List<AccountingForm> accountingForms) {
+        for (AccountingForm form : accountingForms) {
+            Boolean isExist = userService.findUserId(form.getUserId());
+            if (!isExist) {
+                Map<String, Object> response = new HashMap<>();
+                response.put("error", "User with ID " + form.getUserId() + " does not exist.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            }
+            log.info(form.toString());
+            accountingService.saveAccounting(form);
         }
+        return ResponseEntity.ok().build();
     }
 
     @PatchMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
