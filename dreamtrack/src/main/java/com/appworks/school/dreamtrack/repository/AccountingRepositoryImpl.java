@@ -2,6 +2,7 @@ package com.appworks.school.dreamtrack.repository;
 
 import com.appworks.school.dreamtrack.data.dto.AccountingDto;
 import com.appworks.school.dreamtrack.data.dto.ExpensesCategoryDto;
+import com.appworks.school.dreamtrack.data.dto.NowAndPreMonthDto;
 import com.appworks.school.dreamtrack.data.dto.TotalRevenueAndExpensesDto;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -97,6 +98,20 @@ public class AccountingRepositoryImpl implements AccountingRepository {
     }
 
     @Override
+    public List<ExpensesCategoryDto> getTotalExpensesByEachCategoryForYear(Long userId, String date) {
+        String sql = """
+                SELECT accounting_category.name, SUM(accounting.amount) AS `amount`
+                FROM accounting
+                JOIN accounting_category ON accounting.category_id = accounting_category.id
+                WHERE accounting_category.type = '支出'
+                AND DATE_FORMAT(date, '%Y') = ?
+                AND user_id = ?
+                GROUP BY accounting_category.name;
+                """;
+        return jdbcTemplate.query(sql, new ExpensesCategoryDto(), date, userId);
+    }
+
+    @Override
     public List<ExpensesCategoryDto> getTotalExpensesForEachCategory(Long userId, String startDate, String endDate) {
         String sql = """
                 SELECT accounting_category.name, SUM(accounting.amount) AS `amount`
@@ -114,5 +129,22 @@ public class AccountingRepositoryImpl implements AccountingRepository {
     public void updateAccountingRecord(Long id, Long categoryId, Long amount) {
         String updateSql = "UPDATE accounting SET date = NOW(), category_id = ?, amount = ? WHERE id = ?;";
         jdbcTemplate.update(updateSql, categoryId, amount, id);
+    }
+
+    @Override
+    public List<NowAndPreMonthDto> getTotalExpensesNowAndPreMonth(Long userId, String startDate, String endDate) {
+        String sql = """
+                SELECT\s
+                    accounting_category.name,
+                    SUM(CASE WHEN DATE_FORMAT(accounting.date, '%Y-%m') = ? THEN accounting.amount ELSE 0 END) AS last_month,
+                    SUM(CASE WHEN DATE_FORMAT(accounting.date, '%Y-%m') = ? THEN accounting.amount ELSE 0 END) AS this_month
+                FROM accounting
+                JOIN accounting_category ON accounting.category_id = accounting_category.id
+                WHERE accounting_category.type = '支出'
+                AND accounting.user_id = ?
+                AND DATE_FORMAT(accounting.date, '%Y-%m') BETWEEN ? AND ?
+                GROUP BY accounting_category.name;
+                """;
+        return jdbcTemplate.query(sql, new NowAndPreMonthDto(), startDate, endDate, userId, startDate, endDate);
     }
 }

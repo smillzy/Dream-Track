@@ -2,6 +2,7 @@ package com.appworks.school.dreamtrack.repository;
 
 import com.appworks.school.dreamtrack.data.dto.AccountingDto;
 import com.appworks.school.dreamtrack.data.dto.ExpensesCategoryDto;
+import com.appworks.school.dreamtrack.data.dto.NowAndPreMonthDto;
 import com.appworks.school.dreamtrack.data.dto.TotalRevenueAndExpensesDto;
 
 import java.util.List;
@@ -23,7 +24,12 @@ public interface AccountingRepository {
 
     List<ExpensesCategoryDto> getTotalExpensesByEachCategory(Long userId, String date);
 
+    List<ExpensesCategoryDto> getTotalExpensesByEachCategoryForYear(Long userId, String date);
+
     List<ExpensesCategoryDto> getTotalExpensesForEachCategory(Long userId, String startDate, String endDate);
 
     void updateAccountingRecord(Long id, Long categoryId, Long amount);
+
+    List<NowAndPreMonthDto> getTotalExpensesNowAndPreMonth(Long userId, String startDate, String endDate);
+
 }

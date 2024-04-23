@@ -32,7 +32,7 @@
     <div class="header-flex">
         <ul class="main-nav-l">
             <li>
-                <a href="index.html?category=women" id="womenLink">收支圖表</a>
+                <a href="" id="expenseLink" onClick="handleExpenseClick()">收支圖表</a>
             </li>
             <li>|</li>
             <li><a href="index.html?category=men" id="menLink">資產負債表</a></li>
@@ -282,7 +282,7 @@
             <div class="btnCursor" id="asset-stock-action-sale">賣出</div>
         </div>
         <div class="asset-stock-price" id="asset-stock-price">
-            <label for="asset-stock-price-title">股價: </label>
+            <label for="asset-stock-price-detail">股價: </label>
             <input
                     id="asset-stock-price-detail"
                     min="1"
@@ -292,7 +292,7 @@
             />
         </div>
         <div class="asset-stock-quantity" id="asset-stock-quantity">
-            <label for="asset-stock-quantity-title">股數: </label>
+            <label for="asset-stock-quantity-detail">股數: </label>
             <input
                     id="asset-stock-quantity-detail"
                     min="1"
@@ -351,11 +351,19 @@
     </div>
 </div>
 
+<script>
+    function handleExpenseClick() {
+        event.preventDefault(); // 防止頁面立即導航
+        const date = new Date();
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, "0");
+        const newUrl = `/dashboard?date=${year}-${month}`;
+        window.location.href = newUrl; // 更改當前窗口的位置
+    }
+</script>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
 <script th:inline="javascript">
-    /*<![CDATA[*/
-    var events = /*[[${events}]]*/ [];
-    /*]]>*/
+    var events = [[${events != null ? events: '[]' }]];
 </script>
 <script th:src="@{/evo-calendar-min.js}"></script>
 <script th:src="@{/evo-calendar.js}"></script>
