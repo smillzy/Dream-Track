@@ -24,12 +24,12 @@
 <div id="time-container">
     <div id="time-container-left" onclick="navigatePreviousMonth()"><</div>
     <div id="time-container-content" th:text="${time_container}"></div>
-    <div id="time-container-right">></div>
+    <div id="time-container-right" onclick="navigateNextMonth()">></div>
 </div>
-<div id="no-info">
+<div id="no-info" th:style="${showNoInfo} ? 'display: flex;' : 'display: none;'">
     <p>沒有資料</p>
 </div>
-<div id="dashboard">
+<div id="dashboard" th:style="${showNoInfo} ? 'display: none;' : 'display: flex;'">
     <div id="line-one">
         <div id="line-one-1-title">支出細項</div>
         <div id="line-one-piediv">
@@ -41,7 +41,7 @@
             <div id="line-two-1-title">與前月比較</div>
             <div id="chartdiv"></div>
         </div>
-        <div id="line-two-2">
+        <div id="line-two-2" th:style="${hideBudgetDetail} ? 'display: none;'">
             <div id="line-two-2-title">預估 預算</div>
             <div id="budgetdiv">
                 <div class="budget-detail" id="budget-detail" th:style="${budgetStyle}" th:text="${percentage}"></div>
@@ -72,20 +72,40 @@
         }
     }
 
-    function navigatePreviousMonth() {
-        const contentDiv = document.getElementById('time-container-content');
-        const currentDate = contentDiv.textContent.trim();
-        const dateParts = currentDate.split('-');
-        let year = parseInt(dateParts[0]);
-        let month = parseInt(dateParts[1]);
+    const contentDiv = document.getElementById('time-container-content');
+    const currentDate = contentDiv.textContent.trim();
+    const dateParts = currentDate.split('-');
+    let navigateYear = parseInt(dateParts[0]);
+    let navigateMonth = parseInt(dateParts[1]);
 
-        if (month === 1) {
-            month = 12;
-            year -= 1; // 如果是一月，則跳轉到前一年的十二月
+    function navigatePreviousMonth() {
+        if (dateParts.length === 1) {
+            let navigateOnlyYear = parseInt(dateParts[0]) - 1;
+            window.location.href = `/dashboard?year=${navigateOnlyYear}`;
         } else {
-            month -= 1; // 否則月份減一
+            if (navigateMonth === 1) {
+                navigateMonth = 12;
+                navigateYear -= 1; // 如果是一月，則跳轉到前一年的十二月
+            } else {
+                navigateMonth -= 1; // 否則月份減一
+            }
+            window.location.href = `/dashboard?date=${navigateYear}-${navigateMonth.toString().padStart(2, '0')}`;
         }
-        window.location.href = `/dashboard?date=${year}-${month.toString().padStart(2, '0')}`;
+    }
+
+    function navigateNextMonth() {
+        if (dateParts.length === 1) {
+            let navigateOnlyYear = parseInt(dateParts[0]) + 1;
+            window.location.href = `/dashboard?year=${navigateOnlyYear}`;
+        } else {
+            if (navigateMonth === 12) {
+                navigateMonth = 1;
+                navigateYear += 1;
+            } else {
+                navigateMonth += 1;
+            }
+            window.location.href = `/dashboard?date=${navigateYear}-${navigateMonth.toString().padStart(2, '0')}`;
+        }
     }
 </script>
 <script th:inline="javascript">

@@ -46,21 +46,38 @@ public class WebPageController {
             List<NowAndPreMonthDto> eachCategoryNowAndPre = expensesService.findTotalExpensesNowAndPreMonth(userId, date);
             Map<String, Object> budget = expensesService.getBudgetStyle(userId, date);
 
-            model.addAttribute("month_expense", eachCategory);
-            model.addAttribute("month_and_pre_month_expense", eachCategoryNowAndPre);
-            model.addAttribute("budgetStyle", budget.get("budgetStyle"));
-            model.addAttribute("percentage", budget.get("percentage"));
             model.addAttribute("time_container", date);
             model.addAttribute("highlightMonth", true);
             model.addAttribute("highlightYear", false);
+
+            if (!eachCategory.isEmpty()) {
+                model.addAttribute("month_expense", eachCategory);
+                model.addAttribute("month_and_pre_month_expense", eachCategoryNowAndPre);
+            } else {
+                model.addAttribute("showNoInfo", true);
+            }
+
+            if (!budget.isEmpty()) {
+                model.addAttribute("budgetStyle", budget.get("budgetStyle"));
+                model.addAttribute("percentage", budget.get("percentage"));
+            } else {
+                model.addAttribute("hideBudgetDetail", true);
+            }
+
         } else if (year != null) {
             Long userId = Long.valueOf(1);
 
             List<ExpensesCategoryDto> expensesInterval = expensesService.getTotalExpensesByEachCategoryForYear(userId, year);
 
-            model.addAttribute("month_expense", expensesInterval);
+            model.addAttribute("time_container", year);
             model.addAttribute("highlightYear", true);
             model.addAttribute("highlightMonth", false);
+
+            if (!expensesInterval.isEmpty()) {
+                model.addAttribute("month_expense", expensesInterval);
+            } else {
+                model.addAttribute("showNoInfo", true);
+            }
         }
 
         return "dashboard";
