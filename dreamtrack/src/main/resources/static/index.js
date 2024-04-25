@@ -1,372 +1,242 @@
-// gen multi column
-function addNewRow() {
-    const table = document
-        .getElementById("multi-entries-table")
-        .getElementsByTagName("tbody")[0];
-    const newRow = table.insertRow(table.rows.length);
-    newRow.innerHTML = `
-      <td>
-      <select onchange="updateDetails(this)">
-        <option value="" disabled selected>請選擇類別</option>
-        <option value="revenue">收入</option>
-        <option value="expense">支出</option>
-      </select>
-      </td>
-      <td>
-        <select>
-          <!-- 細項選項將根據上面選擇動態更新 -->
-        </select>
-      </td>
-      <td>
-        <input type="number" name="amount" min="1" required>
-      </td>
-    `;
+document.addEventListener("DOMContentLoaded", function () {
+    document
+        .getElementById("addEvent")
+        .addEventListener("click", function () {
+            var entries = document.getElementById("eventEntries");
+            var newRow = document.createElement("tr");
+
+            var typeSelectHtml = `<select class="form-control type" onchange="updateItems(this)">
+            <option>收入</option>
+            <option>支出</option>
+        </select>`;
+            var titleSelectHtml = `<select class="form-control title"></select>`;
+
+            newRow.innerHTML = `
+            <td>${typeSelectHtml}</td>
+            <td>${titleSelectHtml}</td>
+            <td><textarea class="form-control description"></textarea></td>
+            <td><input type="number" class="form-control amount"></td>
+            <td><button type="button" class="btn btn-danger removeEvent">刪除</button></td>
+        `;
+
+            entries.appendChild(newRow);
+            updateItems(newRow.querySelector(".type")); // Initialize title dropdown based on type
+        });
+
+    document
+        .getElementById("eventEntries")
+        .addEventListener("click", function (event) {
+            if (event.target.classList.contains("removeEvent")) {
+                event.target.closest("tr").remove();
+            }
+        });
+});
+
+function updateItems(typeSelectElement) {
+    var itemSelect = typeSelectElement
+        .closest("tr")
+        .querySelector(".title");
+    var items =
+        typeSelectElement.value === "收入"
+            ? ["薪水", "獎金", "季獎金", "三節", "年終", "股利", "利息", "其他"]
+            : ["食物", "飲料", "治裝", "交通", "居家", "醫藥", "保險", "其他"];
+
+    itemSelect.innerHTML = "";
+    items.forEach(function (item) {
+        var option = document.createElement("option");
+        option.value = item;
+        option.textContent = item;
+        itemSelect.appendChild(option);
+    });
 }
 
-function updateDetails(categorySelect) {
-    const detailsSelect =
-        categorySelect.parentNode.nextElementSibling.querySelector("select");
+document.addEventListener("DOMContentLoaded", function () {
+    var calendarEl = document.getElementById("calendar");
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: "dayGridMonth",
+        editable: false,
+        events: [
+            {
+                id: 1,
+                title: "薪水",
+                start: "2024-04-03",
+                description: "Description for Event1",
+                amount: 5000,
+                type: "收入",
+                item: "薪水",
+            },
+            {
+                id: 2,
+                title: "食物",
+                start: "2024-04-02",
+                description: "Description for Event2",
+                amount: 300,
+                type: "支出",
+                item: "食物",
+            },
+        ],
+        eventClassNames: function (arg) {
+            return arg.event.extendedProps.type === "收入"
+                ? ["income-event"]
+                : ["expense-event"];
+        },
+        eventClick: function (info) {
+            isNewEvent = false;
+            currentEvent = info.event;
+            $("#eventId").val(currentEvent.id);
+            $("#title").val(currentEvent.title);
+            $("#description").val(
+                currentEvent.extendedProps?.description || ""
+            );
+            $("#amount").val(currentEvent.extendedProps?.amount || "");
+            $("#type").val(currentEvent.extendedProps?.type || "支出");
+            updateItemsDropdown(
+                currentEvent.extendedProps?.type || "支出",
+                currentEvent.extendedProps?.item
+            );
+            $("#eventModal2").modal("show");
+        },
+        dateClick: function (info) {
+            isNewEvent = true;
+            currentEvent = {
+                title: "new",
+                start: info.dateStr,
+                allDay: true,
+            };
+            var entries = document.getElementById("eventEntries");
+            entries.innerHTML = "";
+            entries.appendChild(createEventRow(currentEvent));
+            $("#eventModal").modal("show");
+        },
+        eventContent: function (arg) {
+            // Creating a span that will contain both the title and the amount
+            var contentEl = document.createElement("span");
+            var titleEl = document.createElement("b");
+            titleEl.textContent = arg.event.title + " - ";
 
-    detailsSelect.innerHTML = "";
+            var amountEl = document.createElement("span");
+            amountEl.textContent = "$" + arg.event.extendedProps.amount;
 
-    let options = [];
-    if (categorySelect.value === "revenue") {
-        options = [
-            "薪水",
-            "獎金",
-            "季獎金",
-            "三節",
-            "年終",
-            "股利",
-            "利息",
-            "其他",
-        ];
-    } else if (categorySelect.value === "expense") {
-        options = ["食物", "飲料", "治裝", "交通", "居家", "醫藥", "保險", "其他"];
+            contentEl.appendChild(titleEl);
+            contentEl.appendChild(amountEl);
+
+            return {domNodes: [contentEl]};
+        },
+    });
+
+    calendar.render();
+
+    document
+        .getElementById("addEvent")
+        .addEventListener("click", function () {
+            var entries = document.getElementById("eventEntries");
+            entries.appendChild(createEventRow());
+        });
+
+    function createEventRow(event = {}) {
+        var row = document.createElement("tr");
+        return row;
     }
 
-    options.forEach(function (option) {
-        var newOption = document.createElement("option");
-        newOption.value = option;
-        newOption.text = option;
-        detailsSelect.appendChild(newOption);
+    $("#eventModal").on("shown.bs.modal", function () {
+        $("#saveEvent")
+            .off("click")
+            .on("click", function () {
+                var rows = document.querySelectorAll(
+                    "#eventEntries tr:not(:empty)"
+                );
+
+                for (var i = 0; i < rows.length; i++) {
+                    var row = rows[i];
+                    var type = row.querySelector(".type").value;
+                    var title = row.querySelector(".title").value;
+                    var description = row.querySelector(".description").value;
+                    var amount = row.querySelector(".amount").value;
+
+                    if (!title.trim() || !type.trim() || !amount.trim()) {
+                        alert(
+                            "Please fill in all required fields (title, type, amount)."
+                        );
+                        break;
+                    }
+
+                    calendar.addEvent({
+                        title: title,
+                        description: description,
+                        amount: parseFloat(amount),
+                        type: type,
+                        start: currentEvent.start,
+                        allDay: currentEvent.allDay,
+                    });
+                }
+                $("#eventModal").modal("hide");
+            });
     });
-}
 
-// For main feat -> accounting, budget, asset, liability
-const accountingBtn = document.getElementById("accounting");
-const budgetBtn = document.getElementById("budget");
-const assettBtn = document.getElementById("asset");
-const liabilityBtn = document.getElementById("liability");
-const allContents = document.querySelectorAll(".content");
+    $("#eventModal2").on("shown.bs.modal", function () {
+        $("#saveEvent2")
+            .off("click")
+            .on("click", function () {
+                var title = $("#title").val();
+                var description = $("#description").val();
+                var amount = $("#amount").val();
+                var type = $("#type").val();
 
-const accountingWrapper = document.getElementById("accounting-content");
-const budgetWrapper = document.getElementById("budget-content");
-const assetWrapper = document.getElementById("asset-content");
-const liabilityWrapper = document.getElementById("liability-content");
+                if (!title || !type || !amount) {
+                    alert(
+                        "Please fill in all required fields (title, type, amount)."
+                    );
+                    return;
+                }
+                // 更新現有事件
+                currentEvent.setProp("title", title);
+                currentEvent.setExtendedProp("description", description);
+                currentEvent.setExtendedProp("amount", parseFloat(amount));
+                currentEvent.setExtendedProp("type", type);
 
-const multi = document.getElementById("accounting-multi-entries");
+                $("#eventModal2").modal("hide");
+            });
 
-const showDetail = (showedElement, hideElementArray) => {
-    multi.style.display = "none";
-    document.querySelectorAll('.selected').forEach((element) => {
-        element.classList.remove('selected');
+        $("#deleteEvent2")
+            .off("click")
+            .on("click", function () {
+                var eventId = $("#eventId").val();
+                var event = calendar.getEventById(eventId);
+                if (
+                    event &&
+                    confirm("Are you sure you want to delete this event?")
+                ) {
+                    event.remove();
+                    $("#eventModal2").modal("hide");
+                }
+            });
     });
-    allContents.forEach((content) => {
-        content.classList.add("hide");
+
+    // 更新下拉選單
+    $("#type").on("change", function () {
+        updateItemsDropdown(this.value);
     });
-    showedElement.classList.remove("hide");
-    hideElementArray.forEach((element) => {
-        element.classList.add("hide");
+});
+
+function updateItemsDropdown(type, selectedItem) {
+    var itemSelect = document.getElementById("title");
+    itemSelect.innerHTML = "";
+
+    var items =
+        type === "收入"
+            ? ["薪水", "獎金", "季獎金", "三節", "年終", "股利", "利息", "其他"]
+            : ["食物", "飲料", "治裝", "交通", "居家", "醫藥", "保險", "其他"];
+
+    items.forEach(function (item) {
+        var option = document.createElement("option");
+        option.value = item;
+        option.textContent = item;
+        itemSelect.appendChild(option);
     });
-};
 
-accountingBtn.addEventListener("click", () => {
-    showDetail(accountingWrapper, [
-        budgetWrapper,
-        assetWrapper,
-        liabilityWrapper,
-    ]);
-});
-budgetBtn.addEventListener("click", () => {
-    reset(document.getElementById("budget-amount"))
-    showDetail(budgetWrapper, [
-        accountingWrapper,
-        assetWrapper,
-        liabilityWrapper,
-    ]);
-});
-assettBtn.addEventListener("click", () => {
-    showDetail(assetWrapper, [
-        accountingWrapper,
-        budgetWrapper,
-        liabilityWrapper,
-    ]);
-});
-liabilityBtn.addEventListener("click", () => {
-    showDetail(liabilityWrapper, [
-        accountingWrapper,
-        assetWrapper,
-        budgetWrapper,
-    ]);
-});
-
-// For accounting datail feature
-
-const showElement = (showedElement, hideElement) => {
-    showedElement.forEach((element) => element.classList.remove("hide"));
-    hideElement.classList.add("hide");
-};
-
-const showSingleOrMultiElement = (showedElement, hideElement) => {
-    showedElement.classList.remove("hide");
-    hideElement.classList.add("hide");
-};
-
-const showMultiElement = (showedElement, hideElementArray) => {
-    showedElement.classList.remove("hide");
-    hideElementArray.forEach((element) => {
-        element.classList.add("hide");
-    });
-};
-
-const accountMulti = document.getElementById("accounting-type-method-multi");
-const accountMultiItem = document.getElementById("accounting-multi-entries");
-const accountSingle = document.getElementById("accounting-type-method-single");
-const accountType = document.getElementById("accounting-type");
-const accountRevenue = document.getElementById("accounting-type-revenue");
-const accountExpense = document.getElementById("accounting-type-expense");
-const accountTitle = document.getElementById("accounting-type-title");
-const accountItemTitle = document.getElementById("accounting-item-title");
-const accountTitleRevenue = document.getElementById(
-    "accounting-type-title-revenue"
-);
-const accountTitleExpense = document.getElementById(
-    "accounting-type-title-expense"
-);
-
-const accountItem = document.getElementById("accounting-item");
-const accountButton = document.getElementById("accounting-button-single");
-const accountRevenueTitle = document.getElementById("accounting-type-title-revenue");
-const accountExpenseTitle = document.getElementById("accounting-type-title-expense");
-
-function resetMultiEntries() {
-    const tableBody = document.getElementById("multi-entries-table").getElementsByTagName("tbody")[0];
-
-    while (tableBody.rows.length > 0) {
-        tableBody.deleteRow(0);
-    }
-
-    addNewRow();
-}
-
-accountMulti.addEventListener("click", () => {
-    resetMultiEntries();
-    accountMulti.classList.add("selected");
-    accountSingle.classList.remove("selected");
-    showMultiElement(accountMultiItem, [accountType, accountItem, accountRevenueTitle, accountExpenseTitle, accountButton, accountItemTitle]);
-    accountMultiItem.style.display = "flex";
-});
-
-accountSingle.addEventListener("click", () => {
-    accountSingle.classList.add("selected");
-    accountMulti.classList.remove("selected");
-    clearSelections(document.getElementById("accounting-type"));
-    multi.style.display = "none";
-    showSingleOrMultiElement(accountType, accountMultiItem);
-});
-
-function resetDetails(container) {
-    container.querySelectorAll('.selected').forEach(el => el.classList.remove('selected'));
-
-    const amountInput = document.getElementById("accounting-amount");
-    if (amountInput) {
-        amountInput.value = '';
+    if (selectedItem) {
+        itemSelect.value = selectedItem;
+    } else {
+        itemSelect.value = items[0];
     }
 }
-
-accountRevenue.addEventListener("click", () => {
-    resetDetails(document.getElementById("accounting-type-title-revenue"));
-    accountRevenue.classList.add("selected");
-    accountExpense.classList.remove("selected");
-    showElement(
-        [accountItemTitle, accountTitleRevenue, accountItem, accountButton],
-        accountTitleExpense
-    );
-});
-accountExpense.addEventListener("click", () => {
-    resetDetails(document.getElementById("accounting-type-title-expense"));
-    accountExpense.classList.add("selected");
-    accountRevenue.classList.remove("selected");
-    showElement(
-        [accountItemTitle, accountTitleExpense, accountItem, accountButton],
-        accountTitleRevenue
-    );
-});
-
-function clearSelections(container) {
-    container.querySelectorAll('.selected').forEach(el => el.classList.remove('selected'));
-}
-
-// Select detail element (16 items)
-function handleRevenueItemSelection(event) {
-    const clickedElement = event.target;
-    clearSelections(clickedElement.parentNode); // Remove element which had been add bofore
-    clickedElement.classList.add('selected'); // Add class which is selected now
-}
-
-document.querySelectorAll('.revenue').forEach(item => {
-    item.addEventListener('click', handleRevenueItemSelection);
-});
-
-document.querySelectorAll('.expense').forEach(item => {
-    item.addEventListener('click', handleRevenueItemSelection);
-});
-
-// Asset
-function reset(container) {
-    const amountInput = container;
-    if (amountInput) {
-        amountInput.value = '';
-    }
-}
-
-const showAssetElement = (showedElement, hideElementArray) => {
-    showedElement.forEach((element) => element.classList.remove("hide"));
-    hideElementArray.forEach((element) => {
-        element.classList.add("hide");
-    });
-};
-
-const assetCurrentDeposit = document.getElementById("asset-current-deposit");
-const assetForeignCurrencies = document.getElementById(
-    "asset-foreign-currencies"
-);
-const assetStock = document.getElementById("asset-stock");
-
-const currentDepositItem = document.getElementById(
-    "asset-current-deposit-wrapper"
-);
-const foreignCurrenciesItem = document.getElementById(
-    "asset-foreign-currencies-wrapper"
-);
-const stockItem = document.getElementById("asset-stock-wrapper");
-
-const assetButton = document.getElementById("asset-button");
-
-assetCurrentDeposit.addEventListener("click", () => {
-    assetCurrentDeposit.classList.add("selected");
-    assetForeignCurrencies.classList.remove("selected");
-    assetStock.classList.remove("selected");
-    clearSelections(document.getElementById("asset-current-deposit-wrapper"));
-    showAssetElement(
-        [currentDepositItem, assetButton],
-        [foreignCurrenciesItem, stockItem]
-    );
-});
-
-assetForeignCurrencies.addEventListener("click", () => {
-    assetForeignCurrencies.classList.add("selected");
-    assetCurrentDeposit.classList.remove("selected");
-    assetStock.classList.remove("selected");
-    reset(document.getElementById("asset-foreign-currencies-name-detail"))
-    reset(document.getElementById("asset-foreign-currencies-amount-foreign-detail"))
-    reset(document.getElementById("asset-foreign-currencies-amount-twd-detail"))
-    reset(document.getElementById("asset-foreign-currencies-rate-detail"))
-    clearSelections(document.getElementById("asset-foreign-currencies-wrapper"));
-    showAssetElement(
-        [foreignCurrenciesItem, assetButton],
-        [currentDepositItem, stockItem]
-    );
-});
-
-assetStock.addEventListener("click", () => {
-    assetStock.classList.add("selected");
-    assetForeignCurrencies.classList.remove("selected");
-    assetCurrentDeposit.classList.remove("selected");
-    clearSelections(document.getElementById("asset-stock-wrapper"));
-    showAssetElement(
-        [stockItem, assetButton],
-        [currentDepositItem, foreignCurrenciesItem]
-    );
-});
-
-const deposit = document.getElementById("asset-current-deposit-type-deposit");
-const withdraw = document.getElementById("asset-current-deposit-type-withdraw");
-
-deposit.addEventListener("click", () => {
-    deposit.classList.add("selected");
-    withdraw.classList.remove("selected");
-    reset(document.getElementById("asset-current-deposit-amount-detail"))
-});
-
-withdraw.addEventListener("click", () => {
-    withdraw.classList.add("selected");
-    deposit.classList.remove("selected");
-});
-
-const currencyBuy = document.getElementById("asset-foreign-currencies-buy");
-const currencySale = document.getElementById("assete-foreign-currencies-sale");
-
-currencyBuy.addEventListener("click", () => {
-    currencyBuy.classList.add("selected");
-    currencySale.classList.remove("selected");
-    reset(document.getElementById("asset-foreign-currencies-amount-foreign-detail"))
-    reset(document.getElementById("asset-foreign-currencies-amount-twd-detail"))
-    reset(document.getElementById("asset-foreign-currencies-rate-detail"))
-});
-
-currencySale.addEventListener("click", () => {
-    currencySale.classList.add("selected");
-    currencyBuy.classList.remove("selected");
-    reset(document.getElementById("asset-foreign-currencies-amount-foreign-detail"))
-    reset(document.getElementById("asset-foreign-currencies-amount-twd-detail"))
-    reset(document.getElementById("asset-foreign-currencies-rate-detail"))
-});
-
-const stockBuy = document.getElementById("asset-stock-action-buy");
-const stockSale = document.getElementById("asset-stock-action-sale");
-
-stockBuy.addEventListener("click", () => {
-    stockBuy.classList.add("selected");
-    stockSale.classList.remove("selected");
-});
-
-stockSale.addEventListener("click", () => {
-    stockSale.classList.add("selected");
-    stockBuy.classList.remove("selected");
-});
-
-const lot = document.getElementById("asset-stock-quantity-lot");
-const share = document.getElementById("asset-stock-quantity-share");
-
-lot.addEventListener("click", () => {
-    lot.classList.add("selected");
-    share.classList.remove("selected");
-});
-
-share.addEventListener("click", () => {
-    share.classList.add("selected");
-    lot.classList.remove("selected");
-});
-
-// liability
-
-const liabilityPayment = document.getElementById("liability-action-payment");
-const liabilityRepayment = document.getElementById("liability-action-repayment");
-
-liabilityPayment.addEventListener("click", () => {
-    liabilityPayment.classList.add("selected");
-    liabilityRepayment.classList.remove("selected");
-    reset(document.getElementById("liability-item-input"))
-    reset(document.getElementById("liability-amount-input"))
-});
-
-liabilityRepayment.addEventListener("click", () => {
-    liabilityRepayment.classList.add("selected");
-    liabilityPayment.classList.remove("selected");
-    reset(document.getElementById("liability-item-input"))
-    reset(document.getElementById("liability-amount-input"))
-});
-
-

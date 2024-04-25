@@ -11,6 +11,8 @@ import org.springframework.jdbc.core.RowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -43,13 +45,22 @@ public class BalanceSheetDto implements RowMapper<BalanceSheetDto> {
     @Override
     public BalanceSheetDto mapRow(ResultSet rs, int rowNum) throws SQLException {
         BalanceSheetDto dto = new BalanceSheetDto();
-        dto.setUserId(rs.getLong("user_id"));
-        dto.setDate(rs.getTimestamp("date").toLocalDateTime());
+//        dto.setUserId(rs.getLong("user_id"));
+//        dto.setDate(rs.getTimestamp("date").toLocalDateTime());
         dto.setAssetCurrent(rs.getLong("asset_current"));
         dto.setAssetCurrencies(rs.getLong("asset_currencies"));
         dto.setAssetStock(rs.getLong("asset_stock"));
         dto.setLiability(rs.getLong("liability"));
         dto.setNetIncome(rs.getLong("net_income"));
         return dto;
+    }
+
+    public List<BalanceItemDto> toBalanceItemDtoList() {
+        List<BalanceItemDto> items = new ArrayList<>();
+        items.add(new BalanceItemDto("活儲", this.assetCurrent));
+        items.add(new BalanceItemDto("外幣", this.assetCurrencies));
+        items.add(new BalanceItemDto("股票", this.assetStock));
+        items.add(new BalanceItemDto("負債", this.liability));
+        return items;
     }
 }

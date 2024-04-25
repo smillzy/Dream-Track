@@ -10,7 +10,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -20,7 +20,7 @@ public class NetIncomeDto implements RowMapper<NetIncomeDto> {
 
     @JsonProperty("date")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime date;
+    private Date date;
 
     @JsonProperty("net_income")
     private Long netIncome;
@@ -28,7 +28,7 @@ public class NetIncomeDto implements RowMapper<NetIncomeDto> {
     @Override
     public NetIncomeDto mapRow(ResultSet rs, int rowNum) throws SQLException {
         NetIncomeDto dto = new NetIncomeDto();
-        dto.setDate(rs.getTimestamp("date").toLocalDateTime());
+        dto.setDate(rs.getDate("date"));
         dto.setNetIncome(rs.getLong("net_income"));
         return dto;
     }

@@ -2,19 +2,32 @@
 <html lang="en">
 <head>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Expenses Dashboard</title>
+    <title>Dream Track</title>
     <link rel="stylesheet" th:href="@{/dashboard.css}" type="text/css"/>
 </head>
 <body>
 <header class="main-header">
     <div class="header-flex">
-        <ul class="main-nav-l">
+        <div id="logo">Dream Track</div>
+        <ul class="feature">
             <li>
-                <a href="" id="expenseLink" onClick="handleExpenseClick()">收支圖表</a>
+                <a href="/">記帳</a
+                >
             </li>
             <li>|</li>
-            <li><a href="index.html?category=men" id="menLink">資產負債表</a></li>
+            <li><a href="/asset">記資產</a></li>
         </ul>
+
+        <ul class="main-nav-l">
+            <li>
+                <a href="" id="expenseLink" onClick="handleExpenseClick()"
+                >收支圖表</a
+                >
+            </li>
+            <li>|</li>
+            <li><a href="" id="menLink" onClick="handleBalanceSheetClick()">資產負債表</a></li>
+        </ul>
+        <div id="login">Log In</div>
     </div>
 </header>
 <div id="time">
@@ -57,6 +70,12 @@
     function handleExpenseClick() {
         event.preventDefault(); // 防止頁面立即導航
         const newUrl = `/dashboard?date=${year}-${month}`;
+        window.location.href = newUrl; // 更改當前窗口的位置
+    }
+
+    function handleBalanceSheetClick() {
+        event.preventDefault(); // 防止頁面立即導航
+        const newUrl = `/balance-sheet?date=${year}-${month}`;
         window.location.href = newUrl; // 更改當前窗口的位置
     }
 

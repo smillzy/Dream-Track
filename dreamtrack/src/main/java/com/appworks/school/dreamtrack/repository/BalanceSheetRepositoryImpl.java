@@ -49,8 +49,34 @@ public class BalanceSheetRepositoryImpl implements BalanceSheetRepository {
 
     @Override
     public BalanceSheetDto getBalanceSheet(Long userId, String date) {
-        String sql = "SELECT * FROM balance_sheet WHERE user_id = ? AND DATE_FORMAT(`date`, '%Y-%m') = ? ;";
-        return jdbcTemplate.queryForObject(sql, new Object[]{userId, date}, new BalanceSheetDto());
+        String sql = "SELECT asset_current, asset_currencies, asset_stock, liability, net_income FROM balance_sheet WHERE user_id = ? AND DATE_FORMAT(`date`, '%Y-%m') = ? ;";
+        List<BalanceSheetDto> results = jdbcTemplate.query(sql, new Object[]{userId, date}, new BalanceSheetDto());
+        if (!results.isEmpty()) {
+            return results.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public BalanceSheetDto getBalanceSheetYear(Long userId, String year) {
+        String sql = """
+                    SELECT 
+                        SUM(asset_current) AS asset_current, 
+                        SUM(asset_currencies) AS asset_currencies, 
+                        SUM(asset_stock) AS asset_stock,
+                        SUM(liability) AS liability, 
+                        SUM(net_income) AS net_income
+                    FROM balance_sheet
+                    WHERE user_id = ? 
+                    AND DATE_FORMAT(`date`, '%Y') = ?;
+                """;
+        List<BalanceSheetDto> results = jdbcTemplate.query(sql, new Object[]{userId, year}, new BalanceSheetDto());
+        if (!results.isEmpty()) {
+            return results.get(0);
+        } else {
+            return null;
+        }
     }
 
     @Override

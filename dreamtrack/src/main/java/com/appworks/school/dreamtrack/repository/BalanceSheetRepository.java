@@ -14,6 +14,8 @@ public interface BalanceSheetRepository {
 
     BalanceSheetDto getBalanceSheet(Long userId, String date);
 
+    BalanceSheetDto getBalanceSheetYear(Long userId, String year);
+
     BalanceSheetIntervalDto getBalanceSheet(Long userId, String startDate, String endDate);
 
     List<NetIncomeDto> getNetIncome(Long userId, String startDate, String endDate);

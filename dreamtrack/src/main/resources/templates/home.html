@@ -1,374 +1,220 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Evo Calendar</title>
+    <title>Dream Track</title>
 
     <meta charset="utf-8"/>
     <meta
-            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
             name="viewport"
     />
 
     <!-- CSS -->
-    <link rel="stylesheet" th:href="@{/evo-calendar-min.css}" type="text/css"/>
-    <link rel="stylesheet" th:href="@{/evo-calendar.css}" type="text/css"/>
+    <link href="https://unpkg.com/fullcalendar@5/main.min.css" rel="stylesheet"/>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
     <link rel="stylesheet" th:href="@{/index.css}" type="text/css"/>
-    <!-- Fonts -->
-    <link
-            href="https://fonts.googleapis.com/css?family=Source+Sans+Pro&display=swap"
-            rel="stylesheet"
-    />
-    <link
-            href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
-            rel="stylesheet"
-    />
-    <link
-            href="https://fonts.googleapis.com/css2?family=Fira+Mono&display=swap"
-            rel="stylesheet"
-    />
+    <!-- CDK -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/fullcalendar@5/main.min.js"></script>
 </head>
 <body>
 <header class="main-header">
     <div class="header-flex">
-        <ul class="main-nav-l">
+        <div id="logo">Dream Track</div>
+        <ul class="feature">
             <li>
-                <a href="" id="expenseLink" onClick="handleExpenseClick()">收支圖表</a>
+                <a href="/">記帳</a
+                >
             </li>
             <li>|</li>
-            <li><a href="index.html?category=men" id="menLink">資產負債表</a></li>
+            <li><a href="/asset">記資產</a></li>
         </ul>
+
+        <ul class="main-nav-l">
+            <li>
+                <a href="" id="expenseLink" onClick="handleExpenseClick()"
+                >收支圖表</a
+                >
+            </li>
+            <li>|</li>
+            <li><a href="" id="menLink" onClick="handleBalanceSheetClick()">資產負債表</a></li>
+        </ul>
+        <div id="login">Log In</div>
     </div>
 </header>
 
-<section id="demos">
-    <div class="section-content">
-        <div class="console-log">
-            <div class="log-content">
-                <div class="--noshadow" id="demoEvoCalendar"></div>
-            </div>
-        </div>
-    </div>
-</section>
-<div class="accounting-feat">
-    <button class="accounting" id="accounting">記帳</button>
-    <button class="budget" id="budget">預算</button>
-    <button class="asset" id="asset">資產</button>
-    <button class="liability" id="liability">負債</button>
-</div>
 
-<div class="hide content" id="accounting-content">
-    <div class="accounting-type-method">
-        <div class="btnCursor" id="accounting-type-method-single">記一筆</div>
-        <div class="btnCursor" id="accounting-type-method-multi">記多筆</div>
-    </div>
-    <div class="accounting-type hide content" id="accounting-type">
-        <div class="accounting-type-title" id="accounting-type-title">類別:</div>
-        <div class="btnCursor" id="accounting-type-revenue">收入</div>
-        <div class="btnCursor" id="accounting-type-expense">支出</div>
-    </div>
-    <div class="accounting-item">
-        <div
-                class="accounting-item-title hide content"
-                id="accounting-item-title"
-        >
-            細項:
-        </div>
-        <div
-                class="accounting-type-title-expense hide content"
-                id="accounting-type-title-expense"
-        >
-            <div class="accounting-type-food btnCursor expense">食物</div>
-            <div class="accounting-type-drink btnCursor expense">飲料</div>
-            <div class="accounting-type-cloth btnCursor expense">治裝</div>
-            <div class="accounting-type-transportation btnCursor expense">交通</div>
-            <div class="accounting-type-home btnCursor expense">居家</div>
-            <div class="accounting-type-medicine btnCursor expense">醫藥</div>
-            <div class="accounting-type-insurance btnCursor expense">保險</div>
-            <div class="accounting-type-other btnCursor expense">其他</div>
-        </div>
-        <div
-                class="accounting-type-title-revenue hide content"
-                id="accounting-type-title-revenue"
-        >
-            <div class="accounting-type-salary btnCursor revenue">薪水</div>
-            <div class="accounting-type-bonus btnCursor revenue">獎金</div>
-            <div class="accounting-type-quarterly-bonus btnCursor revenue">季獎金</div>
-            <div class="accounting-type-three-section-bonus btnCursor revenue">三節</div>
-            <div class="accounting-type-year-bonus btnCursor revenue">年終</div>
-            <div class="accounting-type-dividend btnCursor revenue">股利</div>
-            <div class="accounting-type-interesgt btnCursor revenue">利息</div>
-            <div class="accounting-type-other btnCursor revenue">其他</div>
-        </div>
-    </div>
-    <div class="accounting-item hide content" id="accounting-item">
-        <label for="accounting-amount">金額: </label>
-        <input
-                id="accounting-amount"
-                min="1"
-                name="accounting-amount"
-                required
-                type="number"
-        />
-    </div>
-    <div class="accounting-button-single hide content" id="accounting-button-single">
-        <button class="accounting-sent">送出</button>
-    </div>
-</div>
-<div class="hide content" id="accounting-multi-entries">
-    <table id="multi-entries-table">
-        <thead>
-        <tr>
-            <th>類別</th>
-            <th>細項</th>
-            <th>金額</th>
-        </tr>
-        </thead>
-        <tbody>
-        <!-- Insert table here -->
-        </tbody>
-        <div id="multi-button">
-            <button onclick="addNewRow()">新增一筆</button>
-        </div>
-    </table>
-    <div class="accounting-button-multi" id="accounting-button-multi">
-        <button class="accounting-sent">送出</button>
-    </div>
-</div>
-
-<div class="budget-content hide content" id="budget-content">
-    <div class="budget-title">我的預算</div>
-    <div class="budget-item">
-        <label for="budget-amount">預算: </label>
-        <input
-                id="budget-amount"
-                min="1"
-                name="budget-amount"
-                required
-                type="number"
-        />
-    </div>
-    <div class="budget-button" id="budget-button">
-        <button class="budget-sent">送出</button>
-    </div>
-</div>
-
-<div class="hide content" id="asset-content">
-    <div class="asset-type" id="asset-type">
-        <div class="asset-type-title">類別:</div>
-        <div class="btnCursor" id="asset-current-deposit">活儲</div>
-        <div class="btnCursor" id="asset-foreign-currencies">外幣</div>
-        <div class="btnCursor" id="asset-stock">股票</div>
-    </div>
-
+<div class="calander-bootstrap">
     <div
-            class="asset-current-deposit-wrapper hide content"
-            id="asset-current-deposit-wrapper"
+            aria-hidden="true"
+            aria-labelledby="eventModalLabel"
+            class="modal fade"
+            id="eventModal"
+            role="dialog"
+            tabindex="-1"
     >
-        <div class="asset-current-deposit-type">
-            <div
-                    class="asset-current-deposit-type-title"
-                    id="asset-current-deposit-type-title"
-            >
-                類別:
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eventModalLabel">Event Details</h5>
+                    <button
+                            aria-label="Close"
+                            class="close"
+                            data-dismiss="modal"
+                            type="button"
+                    >
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>類型</th>
+                            <th>項目</th>
+                            <th>描述</th>
+                            <th>金額</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody id="eventEntries">
+                        <tr>
+                            <td>
+                                <select class="form-control type">
+                                    <option>收入</option>
+                                    <option>支出</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="form-control title">
+                                    <option>薪水</option>
+                                </select>
+                            </td>
+                            <td>
+                                <textarea class="form-control description"></textarea>
+                            </td>
+                            <td><input class="form-control amount" type="number"/></td>
+                            <td>
+                                <button class="btn btn-danger removeEvent" type="button">
+                                    刪除
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <button class="btn btn-primary" id="addEvent" type="button">
+                        新增事件
+                    </button>
+                </div>
+                <div class="modal-footer">
+                    <button
+                            class="btn btn-secondary"
+                            data-dismiss="modal"
+                            type="button"
+                    >
+                        Close
+                    </button>
+                    <button class="btn btn-primary" id="saveEvent" type="button">
+                        Save changes
+                    </button>
+                    <button class="btn btn-danger" id="deleteEvent" type="button">
+                        Delete Event
+                    </button>
+                </div>
             </div>
-            <div class="btnCursor" id="asset-current-deposit-type-deposit">
-                存入
-            </div>
-            <div class="btnCursor" id="asset-current-deposit-type-withdraw">
-                提出
-            </div>
-        </div>
-        <div
-                class="asset-current-deposit-amount"
-                id="asset-current-deposit-amount"
-        >
-            <label for="asset-current-deposit-amount-detail">金額: </label>
-            <input
-                    id="asset-current-deposit-amount-detail"
-                    min="1"
-                    name="asset-current-deposit-amount-detail"
-                    required
-                    type="number"
-            />
         </div>
     </div>
 
     <div
-            class="asset-foreign-currencies-wrapper hide content"
-            id="asset-foreign-currencies-wrapper"
+            aria-hidden="true"
+            aria-labelledby="eventModalLabel"
+            class="modal fade"
+            id="eventModal2"
+            role="dialog"
+            tabindex="-1"
     >
-        <div
-                class="asset-foreign-currencies-name"
-                id="asset-foreign-currencies-name"
-        >
-            <label for="asset-foreign-currencies-name-detail">幣別: </label>
-            <input
-                    id="asset-foreign-currencies-name-detail"
-                    min="1"
-                    name="asset-foreign-currencies-name-detail"
-                    required
-                    type="text"
-            />
-        </div>
-        <div class="asset-foreign-currencies-action">
-            <div
-                    class="asset-foreign-currencies-title"
-                    id="asset-foreign-currencies-title"
-            >
-                類別:
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eventModalLabel">Event Details</h5>
+                    <button
+                            aria-label="Close"
+                            class="close"
+                            data-dismiss="modal"
+                            type="button"
+                    >
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <input id="eventId" type="hidden"/>
+                        <div class="form-group">
+                            <label for="type">Type</label>
+                            <select class="form-control" id="type">
+                                <option>收入</option>
+                                <option>支出</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="title">Title</label>
+                            <select class="form-control" id="title"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea class="form-control" id="description"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="amount">Amount</label>
+                            <input class="form-control" id="amount" type="number"/>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button
+                            class="btn btn-secondary"
+                            data-dismiss="modal"
+                            type="button"
+                    >
+                        Close
+                    </button>
+                    <button class="btn btn-primary" id="saveEvent2" type="button">
+                        Save changes
+                    </button>
+                    <button class="btn btn-danger" id="deleteEvent2" type="button">
+                        Delete Event
+                    </button>
+                </div>
             </div>
-            <div class="btnCursor" id="asset-foreign-currencies-buy">買入</div>
-            <div class="btnCursor" id="assete-foreign-currencies-sale">賣出</div>
-        </div>
-        <div
-                class="asset-foreign-currencies-amount-foreign"
-                id="asset-foreign-currencies-amount-foreign"
-        >
-            <label for="asset-foreign-currencies-amount-foreign-detail"
-            >外幣數:
-            </label>
-            <input
-                    id="asset-foreign-currencies-amount-foreign-detail"
-                    min="1"
-                    name="asset-foreign-currencies-amount-foreign-detail"
-                    required
-                    type="number"
-            />
-        </div>
-        <div
-                class="asset-foreign-currencies-amount-twd"
-                id="asset-foreign-currencies-amount-twd"
-        >
-            <label for="asset-foreign-currencies-amount-twd-detail"
-            >臺幣數:
-            </label>
-            <input
-                    id="asset-foreign-currencies-amount-twd-detail"
-                    min="1"
-                    name="asset-foreign-currencies-amount-twd-detail"
-                    required
-                    type="number"
-            />
-        </div>
-        <div
-                class="asset-foreign-currencies-rate"
-                id="asset-foreign-currencies-rate"
-        >
-            <label for="asset-foreign-currencies-rate-detail">匯率: </label>
-            <input
-                    id="asset-foreign-currencies-rate-detail"
-                    min="1"
-                    name="asset-foreign-currencies-rate-detail"
-                    required
-                    type="number"
-            />
         </div>
     </div>
 
-    <div class="asset-stock-wrapper hide content" id="asset-stock-wrapper">
-        <div class="asset-stock-name" id="asset-stock-name">
-            <label for="asset-stock-name-detail">股票代號: </label>
-            <input
-                    id="asset-stock-name-detail"
-                    name="asset-foreign-currencies-name-detail"
-                    required
-            />
-        </div>
-        <div class="asset-stock-action">
-            <div class="asset-stock-action-title" id="asset-stock-action-title">
-                類別:
-            </div>
-            <div class="btnCursor" id="asset-stock-action-buy">買入</div>
-            <div class="btnCursor" id="asset-stock-action-sale">賣出</div>
-        </div>
-        <div class="asset-stock-price" id="asset-stock-price">
-            <label for="asset-stock-price-detail">股價: </label>
-            <input
-                    id="asset-stock-price-detail"
-                    min="1"
-                    name="asset-stock-price-detail"
-                    required
-                    type="number"
-            />
-        </div>
-        <div class="asset-stock-quantity" id="asset-stock-quantity">
-            <label for="asset-stock-quantity-detail">股數: </label>
-            <input
-                    id="asset-stock-quantity-detail"
-                    min="1"
-                    name="asset-stock-quantity-detail"
-                    required
-                    type="number"
-            />
-            <div class="btnCursor" id="asset-stock-quantity-lot">張</div>
-            <div class="btnCursor" id="asset-stock-quantity-share">股</div>
-        </div>
-        <div class="asset-stock-amount" id="asset-stock-amount">
-            <label for="asset-stock-amount-detail">成交金額: </label>
-            <input
-                    id="asset-stock-amount-detail"
-                    min="1"
-                    name="asset-stock-amount-detail"
-                    required
-                    type="number"
-            />
-        </div>
-    </div>
-
-    <div class="asset-button hide content" id="asset-button">
-        <button class="asset-sent">送出</button>
-    </div>
+    <div id="calendar"></div>
 </div>
 
-<div class="liability-content hide content" id="liability-content">
-    <div class="liability-action" id="liability-action">
-        <div class="liability-action-title">類別:</div>
-        <div class="liability-action-payment btnCursor" id="liability-action-payment">借款</div>
-        <div class="liability-action-repayment btnCursor" id="liability-action-repayment">還款</div>
-    </div>
-    <div class="liability-item" id="liability-item">
-        <label for="liability-item">細項: </label>
-        <input
-                id="liability-item-input"
-                min="1"
-                name="liability-item"
-                required
-                type="text"
-        />
-    </div>
-    <div class="liability-amount" id="liability-amount">
-        <label for="liability-amount">金額: </label>
-        <input
-                id="liability-amount-input"
-                min="1"
-                name="liability-amount"
-                required
-                type="number"
-        />
-    </div>
-    <div class="liability-button" id="liability-button">
-        <button class="liability-sent">送出</button>
-    </div>
-</div>
 
 <script>
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+
     function handleExpenseClick() {
         event.preventDefault(); // 防止頁面立即導航
-        const date = new Date();
-        const year = date.getFullYear();
-        const month = (date.getMonth() + 1).toString().padStart(2, "0");
         const newUrl = `/dashboard?date=${year}-${month}`;
-        window.location.href = newUrl; // 更改當前窗口的位置
+        window.location.href = newUrl;
+    }
+
+    function handleBalanceSheetClick() {
+        event.preventDefault(); // 防止頁面立即導航
+        const newUrl = `/balance-sheet?date=${year}-${month}`;
+        window.location.href = newUrl;
     }
 </script>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
 <script th:inline="javascript">
-    var events = [[${events != null ? events: '[]' }]];
+    // var events = [[${events != null ? events: '[]' }]];
 </script>
-<script th:src="@{/evo-calendar-min.js}"></script>
-<script th:src="@{/evo-calendar.js}"></script>
-<script th:src="@{/demo.js}"></script>
 <script th:src="@{/index.js}"></script>
-<script th:src="@{/fetchData.js}"></script>
 </body>
 </html>

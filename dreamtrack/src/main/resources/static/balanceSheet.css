@@ -78,7 +78,6 @@ a:hover {
     height: 50px;
     justify-content: center;
     column-gap: 60px;
-
 }
 
 #month,
@@ -95,7 +94,7 @@ a:hover {
     justify-content: center;
     gap: 20px;
     font-size: 30px;
-    margin-top: 20px
+    margin-top: 20px;
 }
 
 #time-container-left,
@@ -110,78 +109,90 @@ a:hover {
     font-size: 20px;
 }
 
-#dashboard {
+#balance-sheet {
     flex-direction: column;
 }
 
-#line-one {
-    flex-direction: column;
+#line-1,
+#line-2 {
+    display: flex;
     width: 100%;
+    height: 400px;
 }
 
-#line-one-piediv {
-    display: flex;
-    justify-content: center;
+#line-1-pie,
+#line-1-table,
+#line-2-line,
+#line-2-table {
+    width: 50%;
+    height: 400px;
 }
 
-#piediv {
+#line-1-table,
+#line-1-pie,
+#line-2-table,
+#line-2-line {
     display: flex;
     width: 50%;
-    height: 300px;
-    justify-content: center;
-}
-
-#line-two {
-    display: flex;
-    height: 350px;
-    justify-content: space-around;
-}
-
-#line-two-1 {
-    width: 50%;
-    flex-direction: column;
-}
-
-#line-one-1-title,
-#line-two-1-title,
-#line-two-2-title {
-    display: flex;
-    height: 25%;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    font-family: Arial;
-    font-size: 20px;
-    font-weight: bold;
-}
-
-#line-one-1-title {
-    margin: 40px 0 20px 0;
-}
-
-#chartdiv {
-    display: flex;
-    height: 75%;
-}
-
-#budgetdiv {
-    display: flex;
-    height: 75%;
     justify-content: center;
     align-items: center;
 }
 
-#budget-detail {
-    height: 200px;
-    width: 200px;
-    border-radius: 50%;
-    display: flex;
+#line-1-table-content,
+#line-2-table-content {
+    width: 75%;
     justify-content: center;
-    align-items: center;
-    font-size: 25px;
-    font-weight: bold;
+}
+
+#line-1-pie-content,
+#line-2-line-content {
+    width: 75%;
+}
+
+#piediv,
+#linediv {
+
+    height: 400px;
 }
 
 .selected {
     border: 2px solid #9886c7;
+}
+
+/* for table */
+
+.balance-sheet-table {
+    width: 100%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.balance-sheet-table th,
+.balance-sheet-table td {
+    padding: 12px 20px;
+    text-align: left;
+    border-bottom: 1px solid #ccc;
+}
+
+.balance-sheet-table thead th {
+    background-color: #4A69BD;
+    color: white;
+    font-size: 18px;
+    text-align: center;
+}
+
+.balance-sheet-table tbody th {
+    background-color: #82ccdd;
+    color: #0c2461;
+}
+
+.balance-sheet-table tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.balance-sheet-table tr:hover {
+    background-color: #f1f2f6;
 }

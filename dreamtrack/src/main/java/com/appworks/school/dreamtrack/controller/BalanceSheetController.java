@@ -1,5 +1,6 @@
 package com.appworks.school.dreamtrack.controller;
 
+import com.appworks.school.dreamtrack.data.dto.BalanceItemDto;
 import com.appworks.school.dreamtrack.service.BalanceSheetService;
 import com.appworks.school.dreamtrack.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -33,7 +35,7 @@ public class BalanceSheetController {
         Boolean isExist = userService.findUserId(userId);
         if (isExist) {
 
-            Map<String, Object> balanceSheet = balanceSheetService.findBalanceSheet(userId, date);
+            List<BalanceItemDto> balanceSheet = balanceSheetService.findBalanceSheet(userId, date);
 
             Map<String, Object> response = new HashMap<>();
             response.put("data", balanceSheet);

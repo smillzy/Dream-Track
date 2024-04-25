@@ -1,14 +1,9 @@
-body {
-    margin: 0px;
-    padding: 0;
-    bottom: 0;
-}
-
 * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-/* ==========For header=========== */
 ul {
     margin: 0;
     padding: 0;
@@ -26,8 +21,7 @@ a:hover {
     left: 0;
     top: 0;
     height: 140px;
-    width: 100%;
-    padding: 0 54px 0 60px;
+    padding: 0 30px;
     border-bottom: 40px solid #313538;
     font-family: Arial;
     z-index: 99; /* always on the top */
@@ -37,7 +31,32 @@ a:hover {
 .header-flex {
     display: flex;
     height: 100%;
-    justify-content: end;
+    justify-content: space-between;
+}
+
+#logo {
+    display: flex;
+    align-items: center;
+}
+
+#login {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.feature {
+    display: flex;
+    align-items: center;
+    margin-left: 57px;
+    font-size: 20px;
+    letter-spacing: 10px;
+    padding-left: 39px;
+    padding-right: 11px;
+    position: relative;
+    text-decoration: none;
+    color: #3f3a3a;
+    font-weight: bold;
 }
 
 .main-nav-l {
@@ -54,82 +73,117 @@ a:hover {
     font-weight: bold;
 }
 
-.accounting-feat {
-    display: flex;
-    justify-content: center;
-    margin-top: 30px;
-    gap: 30px;
+/*.accounting-feat {*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*    margin-top: 30px;*/
+/*    gap: 30px;*/
+/*}*/
+
+/*#accounting-multi-entries {*/
+/*    justify-content: center;*/
+/*    text-align: center;*/
+/*    align-items: center;*/
+/*    position: relative;*/
+/*    margin: 0 auto;*/
+/*    flex-direction: column;*/
+/*}*/
+
+/*#multi-entries-table {*/
+/*    position: relative;*/
+/*    width: 350px;*/
+/*}*/
+
+/*#multi-button {*/
+/*    width: 100px;*/
+/*    position: absolute;*/
+/*    left: calc(50% + 160px);*/
+/*    bottom: 56px;*/
+/*}*/
+
+/*.accounting-type-method,*/
+/*.accounting-type,*/
+/*.accounting-item,*/
+/*.accounting-button-single,*/
+/*.accounting-button-multi,*/
+/*.budget-title,*/
+/*.budget-item,*/
+/*.budget-button,*/
+/*.asset-type,*/
+/*.asset-current-deposit-type,*/
+/*.asset-current-deposit-amount,*/
+/*.asset-foreign-currencies-name,*/
+/*.asset-foreign-currencies-action,*/
+/*.asset-foreign-currencies-amount-foreign,*/
+/*.asset-foreign-currencies-amount-twd,*/
+/*.asset-foreign-currencies-rate,*/
+/*.asset-stock-name,*/
+/*.asset-stock-action,*/
+/*.asset-stock-price,*/
+/*.asset-stock-quantity,*/
+/*.asset-stock-amount,*/
+/*.asset-button,*/
+/*.liability-action,*/
+/*.liability-item,*/
+/*.liability-amount,*/
+/*.liability-button {*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*    gap: 30px;*/
+/*    margin-top: 30px;*/
+/*}*/
+
+/*.accounting-type-title,*/
+/*.accounting-type-title-expense,*/
+/*.accounting-type-title-revenue {*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*    gap: 30px;*/
+/*}*/
+
+/*.hide {*/
+/*    display: none;*/
+/*}*/
+
+/*.btnCursor {*/
+/*    cursor: pointer;*/
+/*}*/
+
+/*.selected {*/
+/*    border: 2px solid #9886c7;*/
+/*}*/
+
+.income-event {
+    background-color: red;
 }
 
-#accounting-multi-entries {
-    justify-content: center;
-    text-align: center;
-    align-items: center;
-    position: relative;
-    margin: 0 auto;
-    flex-direction: column;
+.expense-event {
+    background-color: green;
 }
 
-#multi-entries-table {
-    position: relative;
-    width: 350px;
+.modal-dialog {
+    max-width: 800px;
+    margin: 1.75rem auto;
 }
 
-#multi-button {
-    width: 100px;
-    position: absolute;
-    left: calc(50% + 160px);
-    bottom: 56px;
+.modal-content {
+    padding: 1rem;
 }
 
-.accounting-type-method,
-.accounting-type,
-.accounting-item,
-.accounting-button-single,
-.accounting-button-multi,
-.budget-title,
-.budget-item,
-.budget-button,
-.asset-type,
-.asset-current-deposit-type,
-.asset-current-deposit-amount,
-.asset-foreign-currencies-name,
-.asset-foreign-currencies-action,
-.asset-foreign-currencies-amount-foreign,
-.asset-foreign-currencies-amount-twd,
-.asset-foreign-currencies-rate,
-.asset-stock-name,
-.asset-stock-action,
-.asset-stock-price,
-.asset-stock-quantity,
-.asset-stock-amount,
-.asset-button,
-.liability-action,
-.liability-item,
-.liability-amount,
-.liability-button {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    margin-top: 30px;
+.form-control {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
 }
 
-.accounting-type-title,
-.accounting-type-title-expense,
-.accounting-type-title-revenue {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
+.btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
 }
 
-.hide {
-    display: none;
-}
-
-.btnCursor {
+.fc-event-main {
     cursor: pointer;
 }
 
-.selected {
-    border: 2px solid #9886c7;
+.fc-toolbar {
+    text-align: center;
 }
