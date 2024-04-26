@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Dream Track</title>
+    <link rel="stylesheet" th:href="@{/dashboard.css}" type="text/css"/>
+</head>
+<body>
+<header class="main-header">
+    <div class="header-flex">
+        <div id="logo">Dream Track</div>
+        <ul class="feature">
+            <li>
+                <a href="/">記帳</a
+                >
+            </li>
+            <li>|</li>
+            <li><a href="/asset">記資產</a></li>
+        </ul>
+
+        <ul class="main-nav-l">
+            <li>
+                <a href="" id="expenseLink" onClick="handleExpenseClick()"
+                >收支圖表</a
+                >
+            </li>
+            <li>|</li>
+            <li><a href="" id="menLink" onClick="handleBalanceSheetClick()">資產負債表</a></li>
+        </ul>
+        <div id="login">Log In</div>
+    </div>
+</header>
+<div id="time">
+    <div id="month" onclick="navigate('month')" th:classappend="${highlightMonth ? 'selected' : ''}">單月收支圖</div>
+    <div id="year" onclick="navigate('year')" th:classappend="${highlightYear ? 'selected' : ''}">年度收支圖</div>
+</div>
+<div id="time-container">
+    <div id="time-container-left" onclick="navigatePreviousMonth()"><</div>
+    <div id="time-container-content" th:text="${time_container}"></div>
+    <div id="time-container-right" onclick="navigateNextMonth()">></div>
+</div>
+<div id="no-info" th:style="${showNoInfo} ? 'display: flex;' : 'display: none;'">
+    <p>沒有資料</p>
+</div>
+<div id="dashboard" th:style="${showNoInfo} ? 'display: none;' : 'display: flex;'">
+    <div id="line-one">
+        <div id="line-one-1-title">支出細項</div>
+        <div id="line-one-piediv">
+            <div id="piediv"></div>
+        </div>
+    </div>
+    <div id="line-two" th:style="${highlightYear} ? 'display: none;' : 'display: flex;'">
+        <div id="line-two-1">
+            <div id="line-two-1-title">與前月比較</div>
+            <div id="chartdiv"></div>
+        </div>
+        <div id="line-two-2" th:style="${hideBudgetDetail} ? 'display: none;'">
+            <div id="line-two-2-title">預估 預算</div>
+            <div id="budgetdiv">
+                <div class="budget-detail" id="budget-detail" th:style="${budgetStyle}" th:text="${percentage}"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+
+    function handleExpenseClick() {
+        event.preventDefault(); // 防止頁面立即導航
+        const newUrl = `/dashboard?date=${year}-${month}`;
+        window.location.href = newUrl; // 更改當前窗口的位置
+    }
+
+    function handleBalanceSheetClick() {
+        event.preventDefault(); // 防止頁面立即導航
+        const newUrl = `/balance-sheet?date=${year}-${month}`;
+        window.location.href = newUrl; // 更改當前窗口的位置
+    }
+
+    function navigate(type) {
+        const lineTwoDiv = document.getElementById('line-two');
+
+        if (type === 'month') {
+            window.location.href = `/dashboard?date=${year}-` + (new Date().getMonth() + 1).toString().padStart(2, '0');
+            lineTwoDiv.style.display = '';
+        } else if (type === 'year') {
+            window.location.href = `/dashboard?year=${year}`;
+            lineTwoDiv.style.display = 'none';
+        }
+    }
+
+    const contentDiv = document.getElementById('time-container-content');
+    const currentDate = contentDiv.textContent.trim();
+    const dateParts = currentDate.split('-');
+    let navigateYear = parseInt(dateParts[0]);
+    let navigateMonth = parseInt(dateParts[1]);
+
+    function navigatePreviousMonth() {
+        if (dateParts.length === 1) {
+            let navigateOnlyYear = parseInt(dateParts[0]) - 1;
+            window.location.href = `/dashboard?year=${navigateOnlyYear}`;
+        } else {
+            if (navigateMonth === 1) {
+                navigateMonth = 12;
+                navigateYear -= 1; // 如果是一月，則跳轉到前一年的十二月
+            } else {
+                navigateMonth -= 1; // 否則月份減一
+            }
+            window.location.href = `/dashboard?date=${navigateYear}-${navigateMonth.toString().padStart(2, '0')}`;
+        }
+    }
+
+    function navigateNextMonth() {
+        if (dateParts.length === 1) {
+            let navigateOnlyYear = parseInt(dateParts[0]) + 1;
+            window.location.href = `/dashboard?year=${navigateOnlyYear}`;
+        } else {
+            if (navigateMonth === 12) {
+                navigateMonth = 1;
+                navigateYear += 1;
+            } else {
+                navigateMonth += 1;
+            }
+            window.location.href = `/dashboard?date=${navigateYear}-${navigateMonth.toString().padStart(2, '0')}`;
+        }
+    }
+</script>
+<script th:inline="javascript">
+    let pieEvents = [[${month_expense != null ? month_expense: '[]' }]];
+    let barEvents = [[${month_and_pre_month_expense != null ? month_and_pre_month_expense: '[]' }]];
+</script>
+<script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+<script th:src="@{/dashboard.js}"></script>
+</body>
+</html>

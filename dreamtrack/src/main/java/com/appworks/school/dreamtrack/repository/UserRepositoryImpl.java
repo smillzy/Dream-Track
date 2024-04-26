@@ -40,4 +40,11 @@ public class UserRepositoryImpl implements UserRepository {
         String countUser = "SELECT COUNT(id) FROM user";
         return jdbcTemplate.queryForList(countUser, Long.class);
     }
+
+    @Override
+    public Boolean findUserId(Long userId) {
+        String findAccountingId = "SELECT COUNT(*) FROM user WHERE id = ?";
+        Long count = jdbcTemplate.queryForObject(findAccountingId, Long.class, userId);
+        return count != null && count > 0;
+    }
 }

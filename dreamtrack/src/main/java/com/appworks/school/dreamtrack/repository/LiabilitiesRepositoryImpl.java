@@ -1,10 +1,10 @@
 package com.appworks.school.dreamtrack.repository;
 
+import com.appworks.school.dreamtrack.data.dto.LiabilitiesDto;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 
 @Repository
 public class LiabilitiesRepositoryImpl implements LiabilitiesRepository {
@@ -35,9 +35,13 @@ public class LiabilitiesRepositoryImpl implements LiabilitiesRepository {
     }
 
     @Override
-    public List<Map<String, Object>> findAllLiabilities(Long userId) {
-        String selectSql = "SELECT * FROM liabilities WHERE user_id = ? ORDER BY date DESC LIMIT 5;";
-        return jdbcTemplate.queryForList(selectSql, userId);
+    public List<LiabilitiesDto> findAllLiabilities(Long userId) {
+        String selectSql = """
+                    SELECT l.item, l.`action`, l.liability_amount, l.`date` FROM liabilities AS l
+                    WHERE user_id = ?
+                    ORDER BY date DESC LIMIT 5;
+                """;
+        return jdbcTemplate.query(selectSql, new LiabilitiesDto(), userId);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.appworks.school.dreamtrack.repository;
 
+import com.appworks.school.dreamtrack.data.dto.BudgetDto;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -25,9 +26,12 @@ public class BudgetRepositoryImpl implements BudgetRepository {
     }
 
     @Override
-    public Long getTotalBudget(Long userId) {
+    public BudgetDto getTotalBudget(Long userId) {
         String sql = "SELECT budget_amount FROM budget WHERE user_id = ?";
-        return jdbcTemplate.queryForObject(sql, Long.class, userId);
+        try {
+            return jdbcTemplate.queryForObject(sql, new Object[]{userId}, new BudgetDto());
+        } catch (Exception e) {
+            return new BudgetDto(0L);
+        }
     }
-
 }

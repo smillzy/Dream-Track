@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dream Track</title>
+
+    <meta charset="utf-8"/>
+    <meta
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+            name="viewport"
+    />
+
+    <!-- CSS -->
+    <link href="https://unpkg.com/fullcalendar@5/main.min.css" rel="stylesheet"/>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/index.css}" type="text/css"/>
+    <!-- CDK -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/fullcalendar@5/main.min.js"></script>
+</head>
+<body>
+<header class="main-header">
+    <div class="header-flex">
+        <div id="logo">Dream Track</div>
+        <ul class="feature">
+            <li>
+                <a href="/">記帳</a
+                >
+            </li>
+            <li>|</li>
+            <li><a href="/asset">記資產</a></li>
+        </ul>
+
+        <ul class="main-nav-l">
+            <li>
+                <a href="" id="expenseLink" onClick="handleExpenseClick()"
+                >收支圖表</a
+                >
+            </li>
+            <li>|</li>
+            <li><a href="" id="menLink" onClick="handleBalanceSheetClick()">資產負債表</a></li>
+        </ul>
+        <div id="login">Log In</div>
+    </div>
+</header>
+
+
+<div class="calander-bootstrap">
+    <div
+            aria-hidden="true"
+            aria-labelledby="eventModalLabel"
+            class="modal fade"
+            id="eventModal"
+            role="dialog"
+            tabindex="-1"
+    >
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eventModalLabel">Event Details</h5>
+                    <button
+                            aria-label="Close"
+                            class="close"
+                            data-dismiss="modal"
+                            type="button"
+                    >
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>類型</th>
+                            <th>項目</th>
+                            <th>描述</th>
+                            <th>金額</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody id="eventEntries">
+                        <tr>
+                            <td>
+                                <select class="form-control type">
+                                    <option>收入</option>
+                                    <option>支出</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="form-control title">
+                                    <option>薪水</option>
+                                </select>
+                            </td>
+                            <td>
+                                <textarea class="form-control description"></textarea>
+                            </td>
+                            <td><input class="form-control amount" type="number"/></td>
+                            <td>
+                                <button class="btn btn-danger removeEvent" type="button">
+                                    刪除
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <button class="btn btn-primary" id="addEvent" type="button">
+                        新增事件
+                    </button>
+                </div>
+                <div class="modal-footer">
+                    <button
+                            class="btn btn-secondary"
+                            data-dismiss="modal"
+                            type="button"
+                    >
+                        Close
+                    </button>
+                    <button class="btn btn-primary" id="saveEvent" type="button">
+                        Save changes
+                    </button>
+                    <button class="btn btn-danger" id="deleteEvent" type="button">
+                        Delete Event
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div
+            aria-hidden="true"
+            aria-labelledby="eventModalLabel"
+            class="modal fade"
+            id="eventModal2"
+            role="dialog"
+            tabindex="-1"
+    >
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eventModalLabel">Event Details</h5>
+                    <button
+                            aria-label="Close"
+                            class="close"
+                            data-dismiss="modal"
+                            type="button"
+                    >
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <input id="eventId" type="hidden"/>
+                        <div class="form-group">
+                            <label for="type">Type</label>
+                            <select class="form-control" id="type">
+                                <option>收入</option>
+                                <option>支出</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="title">Title</label>
+                            <select class="form-control" id="title"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea class="form-control" id="description"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="amount">Amount</label>
+                            <input class="form-control" id="amount" type="number"/>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button
+                            class="btn btn-secondary"
+                            data-dismiss="modal"
+                            type="button"
+                    >
+                        Close
+                    </button>
+                    <button class="btn btn-primary" id="saveEvent2" type="button">
+                        Save changes
+                    </button>
+                    <button class="btn btn-danger" id="deleteEvent2" type="button">
+                        Delete Event
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="calendar"></div>
+</div>
+
+
+<script>
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+
+    function handleExpenseClick() {
+        event.preventDefault(); // 防止頁面立即導航
+        const newUrl = `/dashboard?date=${year}-${month}`;
+        window.location.href = newUrl;
+    }
+
+    function handleBalanceSheetClick() {
+        event.preventDefault(); // 防止頁面立即導航
+        const newUrl = `/balance-sheet?date=${year}-${month}`;
+        window.location.href = newUrl;
+    }
+</script>
+<script th:inline="javascript">
+    // var events = [[${events != null ? events: '[]' }]];
+</script>
+<script th:src="@{/index.js}"></script>
+</body>
+</html>

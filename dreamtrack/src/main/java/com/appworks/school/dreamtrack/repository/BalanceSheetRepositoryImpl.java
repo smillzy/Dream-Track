@@ -1,5 +1,8 @@
 package com.appworks.school.dreamtrack.repository;
 
+import com.appworks.school.dreamtrack.data.dto.BalanceSheetDto;
+import com.appworks.school.dreamtrack.data.dto.BalanceSheetIntervalDto;
+import com.appworks.school.dreamtrack.data.dto.NetIncomeDto;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -45,20 +48,56 @@ public class BalanceSheetRepositoryImpl implements BalanceSheetRepository {
     }
 
     @Override
-    public List<Map<String, Object>> getBalanceSheet(Long userId, String date) {
-        String sql = "SELECT * FROM balance_sheet WHERE user_id = ? AND DATE_FORMAT(`date`, '%Y-%m') = ? ;";
-        return jdbcTemplate.queryForList(sql, userId, date);
+    public BalanceSheetDto getBalanceSheet(Long userId, String date) {
+        String sql = "SELECT asset_current, asset_currencies, asset_stock, liability, net_income FROM balance_sheet WHERE user_id = ? AND DATE_FORMAT(`date`, '%Y-%m') = ? ;";
+        List<BalanceSheetDto> results = jdbcTemplate.query(sql, new Object[]{userId, date}, new BalanceSheetDto());
+        if (!results.isEmpty()) {
+            return results.get(0);
+        } else {
+            return null;
+        }
     }
 
     @Override
-    public List<Map<String, Object>> getBalanceSheet(Long userId, String startDate, String endDate) {
-        String sql = "SELECT * FROM balance_sheet WHERE user_id = ? AND DATE_FORMAT(`date`, '%Y-%m') BETWEEN ? AND ?;";
-        return jdbcTemplate.queryForList(sql, userId, startDate, endDate);
+    public BalanceSheetDto getBalanceSheetYear(Long userId, String year) {
+        String sql = """
+                    SELECT 
+                        SUM(asset_current) AS asset_current, 
+                        SUM(asset_currencies) AS asset_currencies, 
+                        SUM(asset_stock) AS asset_stock,
+                        SUM(liability) AS liability, 
+                        SUM(net_income) AS net_income
+                    FROM balance_sheet
+                    WHERE user_id = ? 
+                    AND DATE_FORMAT(`date`, '%Y') = ?;
+                """;
+        List<BalanceSheetDto> results = jdbcTemplate.query(sql, new Object[]{userId, year}, new BalanceSheetDto());
+        if (!results.isEmpty()) {
+            return results.get(0);
+        } else {
+            return null;
+        }
     }
 
     @Override
-    public List<Map<String, Object>> getNetIncome(Long userId, String startDate, String endDate) {
+    public BalanceSheetIntervalDto getBalanceSheet(Long userId, String startDate, String endDate) {
+        String sql = """
+                    SELECT user_id,
+                           SUM(asset_current) AS asset_current,
+                           SUM(asset_currencies) AS asset_currencies,
+                           SUM(asset_stock) AS asset_stock,
+                           SUM(liability) AS liability,
+                           SUM(net_income) AS net_income
+                    FROM balance_sheet
+                    WHERE user_id = ?
+                    AND DATE_FORMAT(`date`, '%Y-%m') BETWEEN ? AND ?;
+                """;
+        return jdbcTemplate.queryForObject(sql, new Object[]{userId, startDate, endDate}, new BalanceSheetIntervalDto());
+    }
+
+    @Override
+    public List<NetIncomeDto> getNetIncome(Long userId, String startDate, String endDate) {
         String sql = "SELECT `date`, net_income FROM balance_sheet WHERE user_id = ? AND DATE_FORMAT(`date`, '%Y-%m') BETWEEN ? AND ?;";
-        return jdbcTemplate.queryForList(sql, userId, startDate, endDate);
+        return jdbcTemplate.query(sql, new NetIncomeDto(), userId, startDate, endDate);
     }
 }

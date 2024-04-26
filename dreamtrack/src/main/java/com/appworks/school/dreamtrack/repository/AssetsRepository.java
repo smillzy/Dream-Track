@@ -1,14 +1,17 @@
 package com.appworks.school.dreamtrack.repository;
 
+import com.appworks.school.dreamtrack.data.dto.CurrentDepositDto;
+import com.appworks.school.dreamtrack.data.dto.ForeignCurrenciesDto;
+import com.appworks.school.dreamtrack.data.dto.StockDto;
+
 import java.util.List;
-import java.util.Map;
 
 public interface AssetsRepository {
     void insertAssetsCurrentDeposit(Long userId, Long currentDepositAmount);
 
     void updateAssetsCurrentDeposit(Long id, Long currentDepositAmount);
 
-    List<Map<String, Object>> findAllAssetsCurrentDeposit(Long userId);
+    List<CurrentDepositDto> findAllAssetsCurrentDeposit(Long userId);
 
     int getCurrencyId(String currencyName);
 
@@ -16,7 +19,7 @@ public interface AssetsRepository {
 
     void updateAssetsForeignCurrencies(Long id, int currencyId, String action, Long quantityForeign, Long quantityTWD, Float rate);
 
-    List<Map<String, Object>> findAllAssetsForeignCurrencies(Long userId);
+    List<ForeignCurrenciesDto> findAllAssetsForeignCurrencies(Long userId);
 
     int getStockId(String symbol);
 
@@ -24,5 +27,5 @@ public interface AssetsRepository {
 
     void updateAssetsStock(Long id, int stockId, String action, Long price, int quantity, Long stockAmount);
 
-    List<Map<String, Object>> findAllAssetsStock(Long userId);
+    List<StockDto> findAllAssetsStock(Long userId);
 }

@@ -1,0 +1,154 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+a:link,
+a:visited,
+a:hover {
+    color: black;
+    text-decoration: none;
+}
+
+.main-header {
+    left: 0;
+    top: 0;
+    height: 140px;
+    padding: 0 30px;
+    border-bottom: 40px solid #313538;
+    font-family: Arial;
+    z-index: 99; /* always on the top */
+    background-color: #ffffff;
+}
+
+.header-flex {
+    display: flex;
+    height: 100%;
+    justify-content: space-between;
+}
+
+#logo {
+    display: flex;
+    align-items: center;
+}
+
+#login {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.feature {
+    display: flex;
+    align-items: center;
+    margin-left: 57px;
+    font-size: 20px;
+    letter-spacing: 10px;
+    padding-left: 39px;
+    padding-right: 11px;
+    position: relative;
+    text-decoration: none;
+    color: #3f3a3a;
+    font-weight: bold;
+}
+
+.main-nav-l {
+    display: flex;
+    align-items: center;
+    margin-left: 57px;
+    font-size: 20px;
+    letter-spacing: 10px;
+    padding-left: 39px;
+    padding-right: 11px;
+    position: relative;
+    text-decoration: none;
+    color: #3f3a3a;
+    font-weight: bold;
+}
+
+table {
+    width: 75%;
+    border-collapse: collapse;
+    align-items: center;
+}
+
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #9886c7;
+    color: white;
+    text-align: center;
+}
+
+p {
+    font-size: 20px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.delete {
+    text-align: center;
+}
+
+.asset,
+.liability {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.accounting-feat {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    gap: 30px;
+}
+
+.asset-type,
+.asset-current-deposit-type,
+.asset-current-deposit-amount,
+.asset-foreign-currencies-name,
+.asset-foreign-currencies-action,
+.asset-foreign-currencies-amount-foreign,
+.asset-foreign-currencies-amount-twd,
+.asset-foreign-currencies-rate,
+.asset-stock-name,
+.asset-stock-action,
+.asset-stock-price,
+.asset-stock-quantity,
+.asset-stock-amount,
+.asset-button,
+.liability-action,
+.liability-item,
+.liability-amount,
+.liability-button {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.hide {
+    display: none;
+}
+
+.btnCursor {
+    cursor: pointer;
+}
+
+.selected {
+    border: 2px solid #9886c7;
+}
