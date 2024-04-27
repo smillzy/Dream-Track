@@ -40,14 +40,10 @@ public class WebPageController {
         return "home";
     }
 
-//    @GetMapping("/asset")
-//    public String asset(Model model) {
-//        Long userId = Long.valueOf(1);
-////        String date = "2024-04";
-//        Map<String, Object> assetsDetail = assetsService.findAssets(userId);
-////        model.addAttribute("events", accountingDetail);
-//        return "asset";
-//    }
+    @GetMapping("/sign")
+    public String sign() {
+        return "sign";
+    }
 
     @GetMapping("/dashboard")
     public String dashboard(@RequestParam(required = false) String date,
