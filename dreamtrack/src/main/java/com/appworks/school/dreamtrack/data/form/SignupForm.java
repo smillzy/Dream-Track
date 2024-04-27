@@ -25,7 +25,7 @@ public class SignupForm {
     private String email;
 
     @NotBlank(message = "Password cannot be null")
-    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z]).{6,20}$", message = "Password length must be 6 to 20 characters, also include at least one number and lowercase letter.")
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z]).{6,20}$", message = "Password must contain at least one number, one lowercase letter, and be 6-20 characters long.")
     @JsonProperty("password")
     private String password;
 

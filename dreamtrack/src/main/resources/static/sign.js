@@ -29,6 +29,10 @@ home.addEventListener("click", () => {
 })
 
 // submit user info
+const nameRegex = /^[a-zA-Z\u4e00-\u9fa5\s]+$/;
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const passwordRegex = /^(?=.*[0-9])(?=.*[a-z]).{6,20}$/;
+
 const logInButton = document.getElementById("log-in-button");
 
 logInButton.addEventListener("click", logIn)
@@ -39,6 +43,17 @@ async function logIn() {
     try {
         const email = document.getElementById('log-in-email').value;
         const password = document.getElementById('log-in-password').value;
+
+        // Check if email and password are valid
+        if (!emailRegex.test(email)) {
+            alert('Email type wrong.');
+            return;
+        }
+
+        if (!passwordRegex.test(password)) {
+            alert('Password must contain at least one number, one lowercase letter, and be 6-20 characters long.');
+            return;
+        }
 
         const loginData = {
             email: email,
@@ -78,6 +93,21 @@ async function singUp() {
         const name = document.getElementById('sign-up-name').value;
         const email = document.getElementById('sign-up-email').value;
         const password = document.getElementById('sign-up-password').value;
+        // Check if the name is valid
+        if (!nameRegex.test(name)) {
+            alert('Name must contain only letters and spaces.');
+            return; // Stop execution if invalid
+        }
+
+        if (!emailRegex.test(email)) {
+            alert('Email type wrong.');
+            return;
+        }
+
+        if (!passwordRegex.test(password)) {
+            alert('Password must contain at least one number, one lowercase letter, and be 6-20 characters long.');
+            return;
+        }
 
         const singUpData = {
             name: name,
