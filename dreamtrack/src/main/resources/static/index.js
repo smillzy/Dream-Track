@@ -240,3 +240,17 @@ function updateItemsDropdown(type, selectedItem) {
         itemSelect.value = items[0];
     }
 }
+
+// Go to log in page
+const logInform = document.getElementById("login");
+
+logInform.addEventListener("click", () => {
+    window.location.href = '/sign';
+})
+
+// Home page
+const home = document.getElementById("logo");
+
+home.addEventListener("click", () => {
+    window.location.href = '/';
+})

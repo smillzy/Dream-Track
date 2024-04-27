@@ -1,9 +1,12 @@
 package com.appworks.school.dreamtrack.repository;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 
 @Repository
@@ -16,17 +19,18 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    @Transactional
-    public void insertUserInfo(String name, String email, String password) {
-        String checkEmailQuery = "SELECT COUNT(*) FROM user WHERE email = ?";
-        int count = jdbcTemplate.queryForObject(checkEmailQuery, new Object[]{email}, Integer.class);
+    public Long insertUserInfo(String name, String email, String password) {
+        String insertSql = "INSERT INTO user (name, email, password) VALUES (?, ?, ?)";
 
-        if (count == 0) {
-            String insertSql = "INSERT INTO user (name, email, password) VALUES (?, ?, ?)";
-            jdbcTemplate.update(insertSql, name, email, password);
-        } else {
-            throw new RuntimeException("Email already exists");
-        }
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(con -> {
+            PreparedStatement ps = con.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, name);
+            ps.setString(2, email);
+            ps.setString(3, password);
+            return ps;
+        }, keyHolder);
+        return keyHolder.getKey().longValue();
     }
 
     @Override
@@ -46,5 +50,18 @@ public class UserRepositoryImpl implements UserRepository {
         String findAccountingId = "SELECT COUNT(*) FROM user WHERE id = ?";
         Long count = jdbcTemplate.queryForObject(findAccountingId, Long.class, userId);
         return count != null && count > 0;
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        String sql = "SELECT COUNT(*) FROM user WHERE email = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, new Object[]{email}, Integer.class);
+        return count != null && count > 0;
+    }
+
+    @Override
+    public String getUserPassword(String email) {
+        String findPassword = "SELECT password FROM user WHERE email = ?";
+        return jdbcTemplate.queryForObject(findPassword, new Object[]{email}, String.class);
     }
 }

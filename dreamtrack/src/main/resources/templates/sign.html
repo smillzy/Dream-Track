@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+    <title>Dream Track</title>
+
+    <!-- CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/sign.css}" type="text/css"/>
+
+    <!-- CDK -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+<header class="main-header">
+    <div class="header-flex">
+        <div id="logo">Dream Track</div>
+    </div>
+</header>
+
+<div class="main">
+    <div class="log-in-wrapper">
+        <div class="log-in-form" id="log-in-form">
+            <p class="log-in-title" id="log-in-title">Log In</p>
+
+            <div class="log-in">
+                <input class="email" id="log-in-email" name="email" placeholder="Email" type="text"/>
+                <input class="password"
+                       id="log-in-password"
+                       name="Password"
+                       placeholder="Password"
+                       type="password"
+                />
+            </div>
+            <div class="submit">
+                <button class="button" id="log-in-button">Log In</button>
+            </div>
+            <button class="call-sign-up-form" id="call-sign-up-form">
+                Create a new account!
+            </button>
+        </div>
+
+        <div class="sign-up-form hide" id="sign-up-form">
+            <p class="sign-up-title" id="sign-up-title">Sign Up</p>
+
+            <div class="sign-up">
+                <input class="user-name" id="sign-up-name" name="name" placeholder="Name" type="text"/>
+                <input class="email" id="sign-up-email" name="email" placeholder="Email" type="text"/>
+                <input class="password"
+                       id="sign-up-password"
+                       name="Password"
+                       placeholder="Password"
+                       type="password"
+                />
+            </div>
+            <div class="submit">
+                <button class="button" id="sign-up-button">Sign Up</button>
+            </div>
+            <button class="call-log-in-form" id="call-log-in-form">
+                Back to log in!
+            </button>
+        </div>
+    </div>
+</div>
+<script th:src="@{/sign.js}"></script>
+</body>
+</html>
