@@ -126,6 +126,13 @@ canvas {
     max-width: 600px; /* Limits the size of the charts */
 }
 
+.pie-expense {
+    display: block;
+    box-sizing: border-box;
+    height: 300px;
+    width: 300px;
+}
+
 .hide {
     display: none;
 }
