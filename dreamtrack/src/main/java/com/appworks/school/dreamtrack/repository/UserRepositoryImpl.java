@@ -1,5 +1,6 @@
 package com.appworks.school.dreamtrack.repository;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -36,7 +37,11 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public Long getUserId(String email) {
         String findUserId = "SELECT id FROM user WHERE email = ?";
-        return jdbcTemplate.queryForObject(findUserId, new Object[]{email}, Long.class);
+        try {
+            return jdbcTemplate.queryForObject(findUserId, new Object[]{email}, Long.class);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     @Override

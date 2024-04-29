@@ -5,8 +5,12 @@ import com.appworks.school.dreamtrack.data.dto.ExpensesCategoryDto;
 import com.appworks.school.dreamtrack.data.dto.NowAndPreMonthDto;
 import com.appworks.school.dreamtrack.data.dto.TotalRevenueAndExpensesDto;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.util.List;
 
 @Repository
@@ -25,9 +29,23 @@ public class AccountingRepositoryImpl implements AccountingRepository {
     }
 
     @Override
-    public void insertAccountingRecord(Long userId, Long categoryId, Long amount) {
-        String insertSql = "INSERT INTO accounting (user_id, date, category_id, amount) VALUES (?, now(), ?, ?)";
-        jdbcTemplate.update(insertSql, userId, categoryId, amount);
+    public Long insertAccountingRecord(Long userId, Date date, Long categoryId, Long amount, String description) {
+        String insertSql = "INSERT INTO accounting (user_id, date, category_id, amount, description) VALUES (?, ?, ?, ?, ?)";
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(
+                connection -> {
+                    PreparedStatement ps = connection.prepareStatement(insertSql, new String[]{"id"}); // "id" 是自动生成的主键列名
+                    ps.setLong(1, userId);
+                    ps.setDate(2, date);
+                    ps.setLong(3, categoryId);
+                    ps.setLong(4, amount);
+                    ps.setString(5, description);
+                    return ps;
+                },
+                keyHolder);
+
+        return keyHolder.getKey().longValue();
     }
 
     @Override
@@ -44,15 +62,14 @@ public class AccountingRepositoryImpl implements AccountingRepository {
     }
 
     @Override
-    public List<AccountingDto> findAllAccounting(Long userId, String date) {
+    public List<AccountingDto> findAllAccounting(Long userId) {
         String selectSql = """
-                    SELECT a.id, a.`date`, ac.`type`, ac.`name`, a.amount 
+                    SELECT a.id, a.`date`, ac.`type`, ac.`name`, a.amount, a.description
                     FROM accounting AS a
                     JOIN accounting_category AS ac ON a.category_id = ac.id
-                    WHERE user_id = ?
-                    AND DATE_FORMAT(date, '%Y-%m') = ?;
+                    WHERE user_id = ?;
                 """;
-        return jdbcTemplate.query(selectSql, new AccountingDto(), userId, date);
+        return jdbcTemplate.query(selectSql, new AccountingDto(), userId);
     }
 
     @Override
@@ -126,9 +143,9 @@ public class AccountingRepositoryImpl implements AccountingRepository {
     }
 
     @Override
-    public void updateAccountingRecord(Long id, Long categoryId, Long amount) {
-        String updateSql = "UPDATE accounting SET date = NOW(), category_id = ?, amount = ? WHERE id = ?;";
-        jdbcTemplate.update(updateSql, categoryId, amount, id);
+    public void updateAccountingRecord(Long id, Long categoryId, Long amount, String description) {
+        String updateSql = "UPDATE accounting SET category_id = ?, amount = ?, description = ? WHERE id = ?;";
+        jdbcTemplate.update(updateSql, categoryId, amount, description, id);
     }
 
     @Override

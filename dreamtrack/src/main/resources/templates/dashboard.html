@@ -3,138 +3,157 @@
 <head>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Dream Track</title>
+
+    <!-- CSS -->
+    <link
+            href="https://unpkg.com/fullcalendar@5/main.min.css"
+            rel="stylesheet"
+    />
+    <link
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+            rel="stylesheet"
+    />
+    <link rel="stylesheet" th:href="@{/same.css}" type="text/css"/>
     <link rel="stylesheet" th:href="@{/dashboard.css}" type="text/css"/>
+
+    <!-- CDK -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 <header class="main-header">
     <div class="header-flex">
         <div id="logo">Dream Track</div>
-        <ul class="feature">
-            <li>
-                <a href="/">記帳</a
-                >
-            </li>
-            <li>|</li>
-            <li><a href="/asset">記資產</a></li>
-        </ul>
-
-        <ul class="main-nav-l">
-            <li>
-                <a href="" id="expenseLink" onClick="handleExpenseClick()"
-                >收支圖表</a
-                >
-            </li>
-            <li>|</li>
-            <li><a href="" id="menLink" onClick="handleBalanceSheetClick()">資產負債表</a></li>
-        </ul>
+        <div class="searchbar">
+            <form class="form-inline my-2 my-lg-0">
+                <input
+                        class="form-control mr-sm-2"
+                        placeholder="搜尋帳務"
+                        type="search"
+                />
+                <button class="btn btn-outline-light my-2 my-sm-0" type="submit">
+                    搜尋
+                </button>
+            </form>
+        </div>
         <div id="login">Log In</div>
     </div>
 </header>
-<div id="time">
-    <div id="month" onclick="navigate('month')" th:classappend="${highlightMonth ? 'selected' : ''}">單月收支圖</div>
-    <div id="year" onclick="navigate('year')" th:classappend="${highlightYear ? 'selected' : ''}">年度收支圖</div>
-</div>
-<div id="time-container">
-    <div id="time-container-left" onclick="navigatePreviousMonth()"><</div>
-    <div id="time-container-content" th:text="${time_container}"></div>
-    <div id="time-container-right" onclick="navigateNextMonth()">></div>
-</div>
-<div id="no-info" th:style="${showNoInfo} ? 'display: flex;' : 'display: none;'">
-    <p>沒有資料</p>
-</div>
-<div id="dashboard" th:style="${showNoInfo} ? 'display: none;' : 'display: flex;'">
-    <div id="line-one">
-        <div id="line-one-1-title">支出細項</div>
-        <div id="line-one-piediv">
-            <div id="piediv"></div>
+<div class="main-content" id="main-content">
+    <div id="function-list">
+        <div class="function-list-accounting" id="function-list-accounting">
+            <svg viewBox="0 0 384 512" xmlns="http://www.w3.org/2000/svg">
+                <path
+                        d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM80 64h64c8.8 0 16 7.2 16 16s-7.2 16-16 16H80c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64h64c8.8 0 16 7.2 16 16s-7.2 16-16 16H80c-8.8 0-16-7.2-16-16s7.2-16 16-16zm16 96H288c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V256c0-17.7 14.3-32 32-32zm0 32v64H288V256H96zM240 416h64c8.8 0 16 7.2 16 16s-7.2 16-16 16H240c-8.8 0-16-7.2-16-16s7.2-16 16-16z"
+                />
+            </svg>
+            記帳
+        </div>
+        <div class="function-list-asset" id="function-list-asset">
+            <svg viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                <path
+                        d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H208c-26.5 0-48-21.5-48-48V80zM0 272c0-26.5 21.5-48 48-48H80c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V272zM368 96h32c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H368c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48z"
+                />
+            </svg
+            >
+            記資產/負債
+        </div>
+        <div
+                class="function-list-expense-analyze"
+                id="function-list-expense-analyze"
+        >
+            <svg viewBox="0 0 576 512" xmlns="http://www.w3.org/2000/svg">
+                <path
+                        d="M304 240V16.6c0-9 7-16.6 16-16.6C443.7 0 544 100.3 544 224c0 9-7.6 16-16.6 16H304zM32 272C32 150.7 122.1 50.3 239 34.3c9.2-1.3 17 6.1 17 15.4V288L412.5 444.5c6.7 6.7 6.2 17.7-1.5 23.1C371.8 495.6 323.8 512 272 512C139.5 512 32 404.6 32 272zm526.4 16c9.3 0 16.6 7.8 15.4 17c-7.7 55.9-34.6 105.6-73.9 142.3c-6 5.6-15.4 5.2-21.2-.7L320 288H558.4z"
+                />
+            </svg>
+            收支分析
+        </div>
+        <div
+                class="function-list-balance-sheet"
+                id="function-list-balance-sheet"
+        >
+            <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                <path
+                        d="M64 64c0-17.7-14.3-32-32-32S0 46.3 0 64V400c0 44.2 35.8 80 80 80H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H80c-8.8 0-16-7.2-16-16V64zm406.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L320 210.7l-57.4-57.4c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L240 221.3l57.4 57.4c12.5 12.5 32.8 12.5 45.3 0l128-128z"
+                />
+            </svg>
+            資產負債表
+        </div>
+        <div class="function-list-routine" id="function-list-routine">
+            <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                <path
+                        d="M256 0a256 256 0 1 1 0 512A256 256 0 1 1 256 0zM232 120V256c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2V120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"
+                />
+            </svg>
+            週期事件
         </div>
     </div>
-    <div id="line-two" th:style="${highlightYear} ? 'display: none;' : 'display: flex;'">
-        <div id="line-two-1">
-            <div id="line-two-1-title">與前月比較</div>
-            <div id="chartdiv"></div>
+    <div class="dashboard" id="dashboard">
+        <div class="time-wrapper" id="time-wrapper">
+            <div class="time-wrapper-filter" id="time-wrapper-filter">
+                <div class="time-wrapper-filter-month" id="time-wrapper-filter-month">月</div>
+                <div class="time-wrapper-filter-half-month" id="time-wrapper-filter-half-month">近半個月</div>
+                <div class="time-wrapper-filter-year" id="time-wrapper-filter-year">年</div>
+            </div>
+            <div class="time-wrapper-time" id="time-wrapper-time">
+                <div class="time-wrapper-time-left" id="time-wrapper-time-left"><</div>
+                <div class="time-wrapper-time-detail" id="time-wrapper-time-detail">time</div>
+                <div class="time-wrapper-time-right" id="time-wrapper-time-right">></div>
+            </div>
         </div>
-        <div id="line-two-2" th:style="${hideBudgetDetail} ? 'display: none;'">
-            <div id="line-two-2-title">預估 預算</div>
-            <div id="budgetdiv">
-                <div class="budget-detail" id="budget-detail" th:style="${budgetStyle}" th:text="${percentage}"></div>
+        <div class="budget-wrapper" id="budget-wrapper">
+            <div class="budget-wrapper-bar" id="budget-wrapper-bar">
+                剩餘預算 $ 5,000 / $ 10,000
+            </div>
+            <button class="btn btn-info" id="budget-button" type="button">
+                設定預算
+            </button>
+        </div>
+        <div class="chart-wrapper" id="chart-wrapper">
+            <!-- <div id="chart-pie-description" class="chart-pie-description">
+                <div id="description-expense" class="description-expense">支出 $</div>
+                <div id="description-revenue" class="description-revenue">收入 $</div>
+            </div> -->
+            <div class="chart-pie-wrapper" id="chart-pie-wrapper">
+                <div class="pie-expense-revenue" id="pie-expense-revenue">
+                    <canvas id="myDoughnutChart"></canvas>
+                </div>
+                <div class="pie-expense hide" id="pie-expense">
+                    <canvas id="pie-expense-chart"></canvas>
+                </div>
+                <div class="pie-revenue hide" id="pie-revenue">
+                    <canvas id="pie-revenue-chart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="detail-wrapper" id="detail-wrapper">
+            <div class="title-wrapper" id="title-wrapper">
+                <div class="title-wrapper-expense" id="title-wrapper-expense">支出 $</div>
+                <div class="title-wrapper-revenue" id="title-wrapper-revenue">收入 $</div>
+            </div>
+            <div class="detail-container" id="detail-container">
+                <div class="list-group hide" id="detail-wrapper-group">
+                    <button class="list-group-item list-group-item-action" type="button">Dapibus ac facilisis in
+                    </button>
+                    <button class="list-group-item list-group-item-action" type="button">Morbi leo risus</button>
+                    <button class="list-group-item list-group-item-action" type="button">Porta ac consectetur ac
+                    </button>
+                </div>
+                <div class="list-group hide" id="description-wrapper-group">
+                    <button class="list-group-item list-group-item-action" type="button">Dapibus ac facilisis in
+                    </button>
+                    <button class="list-group-item list-group-item-action" type="button">Morbi leo risus</button>
+                    <button class="list-group-item list-group-item-action" type="button">Porta ac consectetur ac
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 </div>
-<script>
-    const date = new Date();
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-
-    function handleExpenseClick() {
-        event.preventDefault(); // 防止頁面立即導航
-        const newUrl = `/dashboard?date=${year}-${month}`;
-        window.location.href = newUrl; // 更改當前窗口的位置
-    }
-
-    function handleBalanceSheetClick() {
-        event.preventDefault(); // 防止頁面立即導航
-        const newUrl = `/balance-sheet?date=${year}-${month}`;
-        window.location.href = newUrl; // 更改當前窗口的位置
-    }
-
-    function navigate(type) {
-        const lineTwoDiv = document.getElementById('line-two');
-
-        if (type === 'month') {
-            window.location.href = `/dashboard?date=${year}-` + (new Date().getMonth() + 1).toString().padStart(2, '0');
-            lineTwoDiv.style.display = '';
-        } else if (type === 'year') {
-            window.location.href = `/dashboard?year=${year}`;
-            lineTwoDiv.style.display = 'none';
-        }
-    }
-
-    const contentDiv = document.getElementById('time-container-content');
-    const currentDate = contentDiv.textContent.trim();
-    const dateParts = currentDate.split('-');
-    let navigateYear = parseInt(dateParts[0]);
-    let navigateMonth = parseInt(dateParts[1]);
-
-    function navigatePreviousMonth() {
-        if (dateParts.length === 1) {
-            let navigateOnlyYear = parseInt(dateParts[0]) - 1;
-            window.location.href = `/dashboard?year=${navigateOnlyYear}`;
-        } else {
-            if (navigateMonth === 1) {
-                navigateMonth = 12;
-                navigateYear -= 1; // 如果是一月，則跳轉到前一年的十二月
-            } else {
-                navigateMonth -= 1; // 否則月份減一
-            }
-            window.location.href = `/dashboard?date=${navigateYear}-${navigateMonth.toString().padStart(2, '0')}`;
-        }
-    }
-
-    function navigateNextMonth() {
-        if (dateParts.length === 1) {
-            let navigateOnlyYear = parseInt(dateParts[0]) + 1;
-            window.location.href = `/dashboard?year=${navigateOnlyYear}`;
-        } else {
-            if (navigateMonth === 12) {
-                navigateMonth = 1;
-                navigateYear += 1;
-            } else {
-                navigateMonth += 1;
-            }
-            window.location.href = `/dashboard?date=${navigateYear}-${navigateMonth.toString().padStart(2, '0')}`;
-        }
-    }
-</script>
-<script th:inline="javascript">
-    let pieEvents = [[${month_expense != null ? month_expense: '[]' }]];
-    let barEvents = [[${month_and_pre_month_expense != null ? month_and_pre_month_expense: '[]' }]];
-</script>
-<script src="https://cdn.amcharts.com/lib/5/index.js"></script>
-<script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
-<script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
-<script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+<script th:src="@{/same.js}"></script>
 <script th:src="@{/dashboard.js}"></script>
 </body>
 </html>

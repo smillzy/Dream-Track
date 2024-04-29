@@ -4,17 +4,31 @@ import com.appworks.school.dreamtrack.data.dto.AccountingDto;
 import com.appworks.school.dreamtrack.data.form.AccountingForm;
 
 import java.util.List;
+import java.util.Map;
 
 public interface AccountingService {
     Long findCategoryId(String categoryName, String type);
 
-    void saveAccounting(AccountingForm accountingForm);
+    List<AccountingDto> saveAccounting(String token, List<AccountingForm> accountingForms) throws UserNotExistException;
 
-    void patchAccounting(AccountingForm accountingForm);
+    void patchAccounting(String token, AccountingForm accountingForm) throws UserNotExistException;
 
     Boolean findAccountingId(Long id);
 
-    void deleteAccounting(long id);
+    void deleteAccounting(Map<String, Long> json, String token) throws UserNotExistException;
 
-    List<AccountingDto> findAllAccounting(Long userId, String date);
+    List<AccountingDto> findAllAccounting(Long userId);
+
+    sealed class AccountingException extends
+            Exception permits UserNotExistException {
+        public AccountingException(String message) {
+            super(message);
+        }
+    }
+
+    final class UserNotExistException extends AccountingException {
+        public UserNotExistException(String message) {
+            super(message);
+        }
+    }
 }

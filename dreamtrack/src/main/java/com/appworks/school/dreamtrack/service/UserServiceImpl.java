@@ -80,4 +80,13 @@ public class UserServiceImpl implements UserService {
         return bCryptPasswordEncoder.matches(password, hashPassword);
     }
 
+    @Override
+    public Long getUserId(String email) throws UserNotExistException {
+        boolean isEmailExist = userRepository.existsByEmail(email);
+        if (!isEmailExist) {
+            throw new UserNotExistException("User Not Found with email : " + email);
+        }
+        return userRepository.getUserId(email);
+    }
+
 }

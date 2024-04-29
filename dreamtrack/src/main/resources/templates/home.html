@@ -21,7 +21,6 @@
     <script src="https://unpkg.com/fullcalendar@5/main.min.js"></script>
 </head>
 <body>
-<body>
 <header class="main-header">
     <div class="header-flex">
         <div id="logo">Dream Track</div>
@@ -29,8 +28,8 @@
             <form class="form-inline my-2 my-lg-0">
                 <input
                         class="form-control mr-sm-2"
-                        type="search"
                         placeholder="搜尋帳務"
+                        type="search"
                 />
                 <button class="btn btn-outline-light my-2 my-sm-0" type="submit">
                     搜尋
@@ -40,48 +39,58 @@
         <div id="login">Log In</div>
     </div>
 </header>
-<div id="main-content" class="main-content">
+<div class="main-content" id="main-content">
     <div id="function-list">
-        <div id="function-list-accounting" class="function-list-accounting">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM80 64h64c8.8 0 16 7.2 16 16s-7.2 16-16 16H80c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64h64c8.8 0 16 7.2 16 16s-7.2 16-16 16H80c-8.8 0-16-7.2-16-16s7.2-16 16-16zm16 96H288c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V256c0-17.7 14.3-32 32-32zm0 32v64H288V256H96zM240 416h64c8.8 0 16 7.2 16 16s-7.2 16-16 16H240c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/></svg>
+        <div class="function-list-accounting" id="function-list-accounting">
+            <svg viewBox="0 0 384 512" xmlns="http://www.w3.org/2000/svg">
+                <path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM80 64h64c8.8 0 16 7.2 16 16s-7.2 16-16 16H80c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64h64c8.8 0 16 7.2 16 16s-7.2 16-16 16H80c-8.8 0-16-7.2-16-16s7.2-16 16-16zm16 96H288c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V256c0-17.7 14.3-32 32-32zm0 32v64H288V256H96zM240 416h64c8.8 0 16 7.2 16 16s-7.2 16-16 16H240c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/>
+            </svg>
             記帳
         </div>
-        <div id="function-list-asset" class="function-list-asset">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+        <div class="function-list-asset" id="function-list-asset">
+            <svg viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
                 <path
                         d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H208c-26.5 0-48-21.5-48-48V80zM0 272c0-26.5 21.5-48 48-48H80c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V272zM368 96h32c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H368c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48z"
-                /></svg
-            >記資產/負債
+                />
+            </svg
+            >
+            記資產/負債
         </div>
         <div
-                id="function-list-expense-analyze"
                 class="function-list-expense-analyze"
+                id="function-list-expense-analyze"
         >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M304 240V16.6c0-9 7-16.6 16-16.6C443.7 0 544 100.3 544 224c0 9-7.6 16-16.6 16H304zM32 272C32 150.7 122.1 50.3 239 34.3c9.2-1.3 17 6.1 17 15.4V288L412.5 444.5c6.7 6.7 6.2 17.7-1.5 23.1C371.8 495.6 323.8 512 272 512C139.5 512 32 404.6 32 272zm526.4 16c9.3 0 16.6 7.8 15.4 17c-7.7 55.9-34.6 105.6-73.9 142.3c-6 5.6-15.4 5.2-21.2-.7L320 288H558.4z"/></svg>
+            <svg viewBox="0 0 576 512" xmlns="http://www.w3.org/2000/svg">
+                <path d="M304 240V16.6c0-9 7-16.6 16-16.6C443.7 0 544 100.3 544 224c0 9-7.6 16-16.6 16H304zM32 272C32 150.7 122.1 50.3 239 34.3c9.2-1.3 17 6.1 17 15.4V288L412.5 444.5c6.7 6.7 6.2 17.7-1.5 23.1C371.8 495.6 323.8 512 272 512C139.5 512 32 404.6 32 272zm526.4 16c9.3 0 16.6 7.8 15.4 17c-7.7 55.9-34.6 105.6-73.9 142.3c-6 5.6-15.4 5.2-21.2-.7L320 288H558.4z"/>
+            </svg>
             收支分析
         </div>
         <div
-                id="function-list-balance-sheet"
                 class="function-list-balance-sheet"
+                id="function-list-balance-sheet"
         >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M64 64c0-17.7-14.3-32-32-32S0 46.3 0 64V400c0 44.2 35.8 80 80 80H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H80c-8.8 0-16-7.2-16-16V64zm406.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L320 210.7l-57.4-57.4c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L240 221.3l57.4 57.4c12.5 12.5 32.8 12.5 45.3 0l128-128z"/></svg>
+            <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                <path d="M64 64c0-17.7-14.3-32-32-32S0 46.3 0 64V400c0 44.2 35.8 80 80 80H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H80c-8.8 0-16-7.2-16-16V64zm406.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L320 210.7l-57.4-57.4c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L240 221.3l57.4 57.4c12.5 12.5 32.8 12.5 45.3 0l128-128z"/>
+            </svg>
             資產負債表
         </div>
-        <div id="function-list-routine" class="function-list-routine">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 0a256 256 0 1 1 0 512A256 256 0 1 1 256 0zM232 120V256c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2V120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"/></svg>
+        <div class="function-list-routine" id="function-list-routine">
+            <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                <path d="M256 0a256 256 0 1 1 0 512A256 256 0 1 1 256 0zM232 120V256c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2V120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"/>
+            </svg>
             週期事件
         </div>
     </div>
-    <div id="calander-bootstrap-budget" class="calander-bootstrap-budget">
-        <div id="budget" class="budget">
-            <div id="budget-bar" class="budget-bar">
-                剩餘預算 $ 5,000 / $ 10,000
-            </div>
-            <button type="button" id="set-budget" class="btn btn-info">
-                設定預算
-            </button>
-        </div>
-        <div id="calander-bootstrap" class="calander-bootstrap">
+    <div class="calander-bootstrap-budget" id="calander-bootstrap-budget">
+<!--        <div class="budget" id="budget">-->
+<!--            <div id="budget-bar">-->
+<!--                剩餘預算 $ 0 / $ 10,000-->
+<!--            </div>-->
+<!--            <button class="btn btn-info" id="set-budget" type="button">-->
+<!--                設定預算-->
+<!--            </button>-->
+<!--        </div>-->
+        <div class="calander-bootstrap" id="calander-bootstrap">
             <div
                     aria-hidden="true"
                     aria-labelledby="eventModalLabel"
@@ -133,7 +142,7 @@
                                         <textarea class="form-control description"></textarea>
                                     </td>
                                     <td>
-                                        <input class="form-control amount" type="number" />
+                                        <input class="form-control amount" type="number"/>
                                     </td>
                                     <td>
                                         <button
@@ -194,7 +203,7 @@
                         </div>
                         <div class="modal-body">
                             <form>
-                                <input id="eventId" type="hidden" />
+                                <input id="eventId" type="hidden"/>
                                 <div class="form-group">
                                     <label for="type">Type</label>
                                     <select class="form-control" id="type">
@@ -215,7 +224,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="amount">Amount</label>
-                                    <input class="form-control" id="amount" type="number" />
+                                    <input class="form-control" id="amount" type="number"/>
                                 </div>
                             </form>
                         </div>
@@ -265,10 +274,36 @@
     //     const newUrl = `/balance-sheet?date=${year}-${month}`;
     //     window.location.href = newUrl;
     // }
+    // function animateBudget() {
+    //     const budgetBar = document.getElementById('budget-bar');
+    //     let currentValue = 0;
+    //     const maxValue = 5000;
+    //     const totalValue = 10000;
+    //     const duration = 1200; // 动画总时长（毫秒）
+    //     const stepTime = 20; // 每步时间间隔（毫秒）
+    //
+    //     const steps = duration / stepTime; // 计算总步数
+    //     const increment = maxValue / steps; // 每步增加的金额
+    //
+    //     const interval = setInterval(() => {
+    //         currentValue += increment;
+    //         if (currentValue >= maxValue) {
+    //             currentValue = maxValue;
+    //             clearInterval(interval);
+    //         }
+    //
+    //         const percentage = (currentValue / totalValue) * 100;
+    //         budgetBar.style.backgroundImage = `linear-gradient(to right, rgb(106, 205, 255) ${percentage}%, #ccc ${percentage}%)`;
+    //         budgetBar.textContent = `剩餘預算 $ ${Math.round(currentValue)} / $ ${totalValue}`;
+    //     }, stepTime);
+    // }
+    //
+    // window.onload = animateBudget;
 </script>
 <script th:inline="javascript">
     // var events = [[${events != null ? events: '[]' }]];
 </script>
+<script th:src="@{/same.js}"></script>
 <script th:src="@{/index.js}"></script>
 </body>
 </html>

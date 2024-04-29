@@ -23,25 +23,9 @@ public class JwtUtil {
                 .compact();
     }
 
-//    public String getUserEmailFromToken(String token) {
-//        return parseToken(token).getSubject();
-//    }
-//
-//    private Claims parseToken(String token) {
-//        return Jwts.parserBuilder()
-//                .setSigningKey(Keys.hmacShaKeyFor(jwtSignKey.getBytes(StandardCharsets.UTF_8)))
-//                .build()
-//                .parseClaimsJws(token)
-//                .getBody();
-//    }
-//
-//    public Date getExpirationDateFromToken(String token) {
-//        return parseToken(token).getExpiration();
-//    }
-
-    public static Claims parseJWT(String token, String secret) {
+    public static Claims parseJWT(String token, String jwtSignKey) {
         return Jwts.parser()
-                .setSigningKey(secret)
+                .setSigningKey(Keys.hmacShaKeyFor(jwtSignKey.getBytes(StandardCharsets.UTF_8)))
                 .parseClaimsJws(token)
                 .getBody();
     }

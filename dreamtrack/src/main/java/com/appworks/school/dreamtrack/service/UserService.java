@@ -11,6 +11,8 @@ public interface UserService {
 
     SignDto login(LogInForm logInForm) throws UserNotExistException, UserPasswordMismatchException;
 
+    Long getUserId(String email) throws UserNotExistException;
+
     sealed class UserException extends
             Exception permits UserEmailExistException, UserNotExistException, UserPasswordMismatchException {
         public UserException(String message) {

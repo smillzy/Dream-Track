@@ -1,3 +1,22 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-weight: inherit;
+    font-style: inherit;
+    font-size: 100%;
+    font-family: inherit;
+    vertical-align: baseline;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -11,7 +30,7 @@ ul {
 }
 
 body {
-    height: 100vh;
+    min-height: 100vh;
 }
 
 a:link,
@@ -81,7 +100,7 @@ a:hover {
 #main-content {
     display: flex;
     width: 100%;
-    height: calc(100% - 70px);
+    min-height: calc(100vh - 70px);
     background-color: #003241;
 
 }
@@ -89,7 +108,7 @@ a:hover {
 #function-list {
     display: flex;
     flex-direction: column;
-    width: 25%;
+    width: 15%;
     height: 100%;
     padding-top: 10px;
     border: 1px solid black;
@@ -97,11 +116,11 @@ a:hover {
 
 #function-list > div {
     color: #fff;
-    padding: 10px;
+    padding: 10px 10px 10px 40px;
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 5px;
+    justify-content: left;
+    gap: 10px;
 }
 
 #function-list > div > svg {

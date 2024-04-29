@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import jakarta.validation.groups.Default;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,12 +18,12 @@ public class AccountingForm {
     @JsonProperty("id")
     private Long id;
 
-    @NotNull(message = "User ID cannot be null", groups = PostOperation.class)
-    @JsonProperty("user_id")
-    private Long userId;
+    @NotNull(message = "Date cannot be null", groups = PostOperation.class)
+    @JsonProperty("date")
+    private String date;
 
     @NotBlank(message = "Category name cannot be null", groups = Default.class)
-    @JsonProperty("category_name")
+    @JsonProperty("title")
     private String categoryName;
 
     @NotBlank(message = "Type cannot be null", groups = Default.class)
@@ -35,9 +34,16 @@ public class AccountingForm {
     @JsonProperty("amount")
     private Long amount;
 
+    @NotBlank(message = "Description cannot be null", groups = Default.class)
+    @JsonProperty("description")
+    private String description;
+
+    public interface PatchOperation {
+    }
+
     public interface PostOperation {
     }
 
-    public interface PatchOperation {
+    public interface Default {
     }
 }

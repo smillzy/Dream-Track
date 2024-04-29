@@ -73,10 +73,10 @@ async function logIn() {
         }
 
         const data = await response.json();
-        localStorage.setItem('accessToken', data.access_token);
+        localStorage.setItem('token', data.access_token);
         localStorage.setItem('userId', data.user_id);
         alert('Login successful!');
-        window.location.href = "/";
+        window.location.href = `/index`;
     } catch (error) {
         console.error('Error:', error);
         alert('Error logging in');
@@ -128,10 +128,10 @@ async function singUp() {
         }
 
         const data = await response.json();
-        localStorage.setItem('accessToken', data.access_token);
+        localStorage.setItem('token', data.access_token);
         localStorage.setItem('userId', data.user_id);
         alert('Login successful!');
-        window.location.href = "/";
+        window.location.href = `/index`;
     } catch (error) {
         console.error('Error:', error);
         alert('Error logging in');
