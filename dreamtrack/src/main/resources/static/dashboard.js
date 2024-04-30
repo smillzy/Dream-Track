@@ -5,13 +5,43 @@ const expenseBtn = document.getElementById("title-wrapper-expense");
 const revenueBtn = document.getElementById("title-wrapper-revenue");
 const detailTable = document.getElementById("detail-wrapper-group");
 const descriptionTable = document.getElementById("description-wrapper-group");
+let hostName = window.location.protocol;
+let domainName = window.location.hostname;
+let port = window.location.port;
+let currentType = "month";
 
 const eandrPie = document.getElementById("pie-expense-revenue");
 const datailPie = document.getElementById("pie-expense");
 
-window.onload = function () {
+window.onload = async function () {
     monthBtn.click();
-    animateBudget();
+    try {
+        const time = document.getElementById("time-wrapper-time-detail").textContent;
+        const formattedTime = time.replace(/(\d+)年 (\d+)月/, '$1-$2');
+        const initialURL = `${hostName}//${domainName}:${port}/dashboard`;
+        const token = localStorage.getItem('token');
+        const response = await fetch(initialURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                'date': formattedTime
+            })
+        });
+
+        if (!response.ok) {
+
+            alert("There is something wrong!");
+        }
+        data = await response.json();
+
+        animateBudget(data.budget, data.total_expense);
+        eandrpieChart(data.total_expense, data.total_revenue)
+    } catch (error) {
+        console.error('Error fetching profile data:', error);
+    }
 };
 
 const selectedDetail = (showedElement, hideElement) => {
@@ -28,32 +58,144 @@ const hideElement = (showElements, hideElements) => {
     hideElements.forEach(element => element.classList.add("hide"));
 }
 
-monthBtn.addEventListener("click", () => {
+monthBtn.addEventListener("click", async () => {
     selectedDetail(monthBtn, [halfMonthBtn, yearBtn]);
     hideElement([eandrPie], [datailPie, detailTable, descriptionTable]);
     [expenseBtn, revenueBtn].forEach(btn => btn.classList.remove("selected"));
-    setTimeout(() => {
-        eandrpieChart();
-    }, 0);
+    currentType = "month";
+    const now = new Date(2024, 3); // 2024年4月
+    updateTimeDetail(now);
+    getMonthData();
 });
 
 halfMonthBtn.addEventListener("click", () => {
     selectedDetail(halfMonthBtn, [yearBtn, monthBtn]);
     hideElement([eandrPie], [datailPie, detailTable, descriptionTable]);
     [expenseBtn, revenueBtn].forEach(btn => btn.classList.remove("selected"));
-    setTimeout(() => {
-        eandrpieChart();
-    }, 0);
+    currentType = "half-month";
+    const now = new Date(2024, 3); // 设置为2024年4月的Date对象
+    const sixMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 5, 1); // 计算六个月前
+    updateTimeDetail(sixMonthsAgo, now);
+    getHalfMonthData();
 });
 
 yearBtn.addEventListener("click", () => {
     selectedDetail(yearBtn, [halfMonthBtn, monthBtn]);
     hideElement([eandrPie], [datailPie, detailTable, descriptionTable]);
     [expenseBtn, revenueBtn].forEach(btn => btn.classList.remove("selected"));
-    setTimeout(() => {
-        eandrpieChart();
-    }, 0);
+    currentType = "year";
+    const now = new Date();
+    timeDetail.textContent = `${now.getFullYear()}年`;
+    getYearData();
 });
+
+async function getMonthData() {
+    try {
+        const time = document.getElementById("time-wrapper-time-detail").textContent;
+        const formattedTime = time.replace(/(\d+)年 (\d+)月/, '$1-$2');
+        const initialURL = `${hostName}//${domainName}:${port}/dashboard`;
+        const token = localStorage.getItem('token');
+        const response = await fetch(initialURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                'date': formattedTime
+            })
+        });
+
+        if (!response.ok) {
+
+            alert("There is something wrong!");
+        }
+        const text = await response.text();
+        const data = JSON.parse(text);
+
+        animateBudget(data.budget, data.total_expense);
+        eandrpieChart(data.total_expense, data.total_revenue)
+    } catch (error) {
+        console.error('Error fetching profile data:', error);
+    }
+}
+
+async function getHalfMonthData() {
+    try {
+        const time = document.getElementById("time-wrapper-time-detail").textContent;
+        const formattedTime = splitDates(time);
+        const initialURL = `${hostName}//${domainName}:${port}/dashboard`;
+        const token = localStorage.getItem('token');
+        const response = await fetch(initialURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                'start_date': formattedTime[0],
+                'end_date': formattedTime[1]
+            })
+        });
+
+        if (!response.ok) {
+            console.error('HTTP 錯誤', response.status, await response.text());
+            alert("There is something wrong!");
+        }
+        const text = await response.text();
+        const data = JSON.parse(text);
+
+        animateBudget(data.budget, data.total_expense);
+        eandrpieChart(data.total_expense, data.total_revenue)
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+}
+
+async function getYearData() {
+    try {
+        const time = document.getElementById("time-wrapper-time-detail").textContent;
+        const formattedTime = time.match(/(\d+)年/)[1];
+        const initialURL = `${hostName}//${domainName}:${port}/dashboard`;
+        const token = localStorage.getItem('token');
+        const response = await fetch(initialURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                'year': formattedTime
+            })
+        });
+
+        if (!response.ok) {
+
+            alert("There is something wrong!");
+        }
+        const text = await response.text();
+        const data = JSON.parse(text);
+
+        animateBudget(data.budget, data.total_expense);
+        eandrpieChart(data.total_expense, data.total_revenue)
+    } catch (error) {
+        console.error('Error fetching profile data:', error);
+    }
+}
+
+function splitDates(dateRange) {
+    // Regular expression to match the years and months
+    const regex = /(\d+)年 (\d+)月/g;
+
+    // Find all matches
+    let matches = [...dateRange.matchAll(regex)];
+
+    // Map over the matches to format them as 'year-month'
+    let formattedDates = matches.map(match => `${match[1]}-${match[2].padStart(2, '0')}`);
+
+    return formattedDates;
+}
+
 
 expenseBtn.addEventListener("click", () => {
     selectedDetail(expenseBtn, revenueBtn);
@@ -97,29 +239,6 @@ const updateTimeDetail = (start, end) => {
     }
 };
 
-// 设置当前日期类型：'month', 'half-month', 'year'
-let currentType = "month";
-
-// 添加事件处理函数
-monthBtn.addEventListener("click", () => {
-    currentType = "month";
-    const now = new Date(2024, 3); // 2024年4月
-    updateTimeDetail(now);
-});
-
-halfMonthBtn.addEventListener("click", () => {
-    currentType = "half-month";
-    const now = new Date(2024, 3); // 设置为2024年4月的Date对象
-    const sixMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 5, 1); // 计算六个月前
-    updateTimeDetail(sixMonthsAgo, now);
-});
-
-yearBtn.addEventListener("click", () => {
-    currentType = "year";
-    const now = new Date();
-    timeDetail.textContent = `${now.getFullYear()}年`;
-});
-
 leftArrow.addEventListener("click", () => {
     const parts = timeDetail.textContent.split(" ~ ");
     const start = new Date(parts[0].replace(/年|月/g, "/"));
@@ -128,13 +247,16 @@ leftArrow.addEventListener("click", () => {
     if (currentType === "month") {
         start.setMonth(start.getMonth() - 1);
         updateTimeDetail(start);
+        getMonthData()
     } else if (currentType === "half-month") {
         start.setMonth(start.getMonth() - 6);
         end.setMonth(end.getMonth() - 6);
         updateTimeDetail(start, end);
+        getHalfMonthData()
     } else if (currentType === "year") {
         start.setFullYear(start.getFullYear() - 1);
         timeDetail.textContent = `${start.getFullYear()}年`;
+        getYearData();
     }
 });
 
@@ -149,13 +271,16 @@ rightArrow.addEventListener("click", () => {
     if (currentType === "month") {
         start.setMonth(start.getMonth() + 1);
         updateTimeDetail(start);
+        getMonthData()
     } else if (currentType === "half-month") {
         start.setMonth(start.getMonth() + 6);
         end.setMonth(end.getMonth() + 6);
         updateTimeDetail(start, end);
+        getHalfMonthData()
     } else if (currentType === "year") {
         start.setFullYear(start.getFullYear() + 1);
         timeDetail.textContent = `${start.getFullYear()}年`;
+        getYearData();
     }
 });
 
@@ -193,7 +318,7 @@ function pieChart() {
     });
 }
 
-function eandrpieChart() {
+function eandrpieChart(expense, revenue) {
     const canvas = document.getElementById("myDoughnutChart");
     const ctxDoughnut = canvas.getContext("2d");
 
@@ -207,7 +332,7 @@ function eandrpieChart() {
         data: {
             datasets: [
                 {
-                    data: [300, 200],
+                    data: [revenue, expense],
                     backgroundColor: ["rgb(255, 99, 132)", "rgb(54, 162, 235)"],
                 },
             ],
@@ -223,11 +348,16 @@ function eandrpieChart() {
     });
 }
 
-function animateBudget() {
+function animateBudget(budget, expense) {
     const budgetBar = document.getElementById("budget-wrapper-bar");
+    if (budget === 0) {
+        budgetBar.textContent = "尚未設定預算";
+        return;
+    }
+
     let currentValue = 0;
-    const maxValue = 5000;
-    const totalValue = 10000;
+    const maxValue = expense;
+    const totalValue = budget;
     const duration = 1200; // 动画总时长（毫秒）
     const stepTime = 20; // 每步时间间隔（毫秒）
 

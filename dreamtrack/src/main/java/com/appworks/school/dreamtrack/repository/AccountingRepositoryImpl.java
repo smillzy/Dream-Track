@@ -101,6 +101,20 @@ public class AccountingRepositoryImpl implements AccountingRepository {
     }
 
     @Override
+    public TotalRevenueAndExpensesDto getTotalRevenueAndExpensesForYear(Long userId, String year) {
+        String sql = """
+                    SELECT
+                        SUM(CASE WHEN accounting_category.type = '收入' THEN accounting.amount ELSE 0 END) AS total_revenue,
+                        SUM(CASE WHEN accounting_category.type = '支出' THEN accounting.amount ELSE 0 END) AS total_expenses
+                    FROM accounting
+                    JOIN accounting_category ON accounting.category_id = accounting_category.id
+                    WHERE DATE_FORMAT(accounting.date, '%Y') = ?
+                    AND accounting.user_id = ?;
+                """;
+        return jdbcTemplate.queryForObject(sql, new Object[]{year, userId}, new TotalRevenueAndExpensesDto());
+    }
+
+    @Override
     public List<ExpensesCategoryDto> getTotalExpensesByEachCategory(Long userId, String date) {
         String sql = """
                 SELECT accounting_category.name, SUM(accounting.amount) AS `amount`

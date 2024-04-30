@@ -23,6 +23,8 @@ public interface AccountingRepository {
 
     TotalRevenueAndExpensesDto getTotalRevenueAndExpenses(Long userId, String startDate, String endDate);
 
+    TotalRevenueAndExpensesDto getTotalRevenueAndExpensesForYear(Long userId, String year);
+
     List<ExpensesCategoryDto> getTotalExpensesByEachCategory(Long userId, String date);
 
     List<ExpensesCategoryDto> getTotalExpensesByEachCategoryForYear(Long userId, String date);

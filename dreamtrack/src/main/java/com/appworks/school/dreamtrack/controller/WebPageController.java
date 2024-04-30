@@ -5,6 +5,7 @@ import com.appworks.school.dreamtrack.data.dto.AccountingDto;
 import com.appworks.school.dreamtrack.data.dto.BalanceItemDto;
 import com.appworks.school.dreamtrack.data.dto.BalanceSheetDto;
 import com.appworks.school.dreamtrack.data.dto.NetIncomeDto;
+import com.appworks.school.dreamtrack.data.form.DashboardForm;
 import com.appworks.school.dreamtrack.model.ErrorResponse;
 import com.appworks.school.dreamtrack.service.*;
 import io.jsonwebtoken.Claims;
@@ -15,10 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -38,26 +36,27 @@ public class WebPageController {
 
     private final BudgetService budgetService;
 
+    private final WebPageService webPageService;
+
     private @Value("${jwt.signKey}") String jwtSignKey;
 
 //    private final AssetsService assetsService;
 
     public WebPageController(AccountingService accountingService, ExpensesService expensesService,
                              BalanceSheetService balanceSheetService, UserService userService,
-                             BudgetService budgetService) {
+                             BudgetService budgetService, WebPageService webPageService) {
         this.accountingService = accountingService;
         this.expensesService = expensesService;
         this.balanceSheetService = balanceSheetService;
         this.userService = userService;
         this.budgetService = budgetService;
+        this.webPageService = webPageService;
     }
 
-//    @GetMapping("/")
-//    public String home(@RequestParam(name = "user-id") String userId, Model model) {
-//        List<AccountingDto> accountingDetail = accountingService.findAllAccounting(Long.valueOf(userId));
-//        model.addAttribute("events", accountingDetail);
-//        return "home";
-//    }
+    @GetMapping("/")
+    public String index() {
+        return "home";
+    }
 
     @GetMapping("/index")
     public String home() {
@@ -71,10 +70,8 @@ public class WebPageController {
             response.put(HttpStatus.BAD_REQUEST, "Token is empty!");
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
-        String token = authorization.split(" ")[1].trim();
-        JwtUtil jwtToken = new JwtUtil();
-        Claims claims = jwtToken.parseJWT(token, jwtSignKey);
-        String email = (String) claims.get("sub");
+
+        String email = parseToken(authorization);
 
         try {
             Long userId = userService.getUserId(email);
@@ -98,52 +95,41 @@ public class WebPageController {
     }
 
 
-//    @GetMapping("/dashboard")
-//    public String dashboard(@RequestParam(required = false) String date,
-//                            @RequestParam(required = false) String year,
-//                            Model model) {
-//        if (date != null) {
-//            Long userId = Long.valueOf(1);
-//            List<ExpensesCategoryDto> eachCategory = expensesService.findOnlyExpenseItems(userId, date);
-//            List<NowAndPreMonthDto> eachCategoryNowAndPre = expensesService.findTotalExpensesNowAndPreMonth(userId, date);
-//            Map<String, Object> budget = expensesService.getBudgetStyle(userId, date);
-//
-//            model.addAttribute("time_container", date);
-//            model.addAttribute("highlightMonth", true);
-//            model.addAttribute("highlightYear", false);
-//
-//            if (!eachCategory.isEmpty()) {
-//                model.addAttribute("month_expense", eachCategory);
-//                model.addAttribute("month_and_pre_month_expense", eachCategoryNowAndPre);
-//            } else {
-//                model.addAttribute("showNoInfo", true);
-//            }
-//
-//            if (!budget.isEmpty()) {
-//                model.addAttribute("budgetStyle", budget.get("budgetStyle"));
-//                model.addAttribute("percentage", budget.get("percentage"));
-//            } else {
-//                model.addAttribute("hideBudgetDetail", true);
-//            }
-//
-//        } else if (year != null) {
-//            Long userId = Long.valueOf(1);
-//
-//            List<ExpensesCategoryDto> expensesInterval = expensesService.getTotalExpensesByEachCategoryForYear(userId, year);
-//
-//            model.addAttribute("time_container", year);
-//            model.addAttribute("highlightYear", true);
-//            model.addAttribute("highlightMonth", false);
-//
-//            if (!expensesInterval.isEmpty()) {
-//                model.addAttribute("month_expense", expensesInterval);
-//            } else {
-//                model.addAttribute("showNoInfo", true);
-//            }
-//        }
-//
-//        return "dashboard";
-//    }
+    @PostMapping("/dashboard")
+    public ResponseEntity<?> dashboard(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
+                                       @RequestBody(required = false) DashboardForm date) throws UserService.UserNotExistException {
+
+        if (authorization == null || authorization.isEmpty()) {
+            Map<HttpStatus, String> response = new HashMap<>();
+            response.put(HttpStatus.BAD_REQUEST, "Token is empty!");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+
+        String email = parseToken(authorization);
+        try {
+            Long userId = userService.getUserId(email);
+
+            if (date.getDate() != null) {
+
+                Map<String, Object> response = webPageService.findExpensesForMonth(userId, date.getDate());
+                return ResponseEntity.ok().body(response);
+
+            } else if (date.getStartDate() != null && date.getEndDate() != null) {
+
+                Map<String, Object> response = webPageService.findExpensesForHalfMonth(userId, date.getStartDate(), date.getEndDate());
+                return ResponseEntity.ok().body(response);
+
+            } else if (date.getYear() != null) {
+
+                Map<String, Object> response = webPageService.findExpensesForYear(userId, date.getYear());
+                return ResponseEntity.ok().body(response);
+            }
+
+        } catch (UserService.UserException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
+        }
+        return null;
+    }
 
     @GetMapping("/balance-sheet")
     public String balanceSheet(@RequestParam(required = false) String date,
@@ -188,6 +174,14 @@ public class WebPageController {
             }
         }
         return "balanceSheet";
+    }
+
+    private String parseToken(String authorization) {
+        String token = authorization.split(" ")[1].trim();
+        JwtUtil jwtToken = new JwtUtil();
+        Claims claims = jwtToken.parseJWT(token, jwtSignKey);
+        String email = (String) claims.get("sub");
+        return email;
     }
 
 }

@@ -23,7 +23,9 @@ const parseURLParameter = async () => {
         });
 
         if (!response.ok) {
-            alert("There is something wrong!");
+
+            alert("There is something wrong! Please log in again.");
+            window.location.href = '/sign';
         }
 
         events = await response.json();
